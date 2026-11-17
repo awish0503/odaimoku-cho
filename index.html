@@ -1,0 +1,1062 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#145b86">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-192.png">
+<title>お題目帳</title>
+<style>
+:root{
+  --bg:#f2f5f8;--card:#fff;--ink:#1d2b38;--sub:#6a7a8b;--line:#e2e8ee;
+  --pri:#1491cc;--pri2:#0c6fa3;--navy:#145b86;--soft:#e8f4fb;--warn:#d9534f;--ok:#2e9d5b;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;background:var(--bg);color:var(--ink);
+  font-family:"Hiragino Maru Gothic ProN","Hiragino Sans","Noto Sans JP","Noto Sans CJK JP","Yu Gothic",system-ui,sans-serif;
+  font-size:16px;line-height:1.55}
+button{font:inherit;color:inherit;border:0;background:none;cursor:pointer;padding:0}
+input,textarea,select{font:inherit;color:inherit}
+rt{font-size:.5em;font-weight:500;letter-spacing:0;opacity:.85}
+ruby{ruby-position:over}
+.wrap{max-width:540px;margin:0 auto;padding:0 12px calc(86px + env(safe-area-inset-bottom))}
+
+/* header */
+#hdr{position:sticky;top:0;z-index:20;background:var(--navy);color:#fff;padding-top:env(safe-area-inset-top)}
+.hd{max-width:540px;margin:0 auto;display:flex;align-items:center;gap:8px;padding:10px 14px}
+.hd .ttl{font-size:19px;font-weight:700;letter-spacing:.04em;flex:1}
+.mode{font-size:11px;padding:3px 8px;border-radius:99px;background:rgba(255,255,255,.16);white-space:nowrap}
+.mode.local{background:#f0a030;color:#3a2500}
+.me{display:flex;align-items:center;gap:4px;background:rgba(255,255,255,.18);border-radius:99px;padding:4px 10px 4px 4px;font-size:14px;color:#fff}
+.me .av{width:26px;height:26px;font-size:15px}
+
+/* nav */
+#tabs{position:fixed;left:0;right:0;bottom:0;z-index:20;background:#fff;border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom)}
+#tabs .in{max-width:540px;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr)}
+#tabs button{display:flex;flex-direction:column;align-items:center;gap:1px;padding:7px 0 8px;font-size:11px;color:#94a2b0}
+#tabs button .ic{font-size:21px;line-height:1.2;filter:grayscale(1);opacity:.6}
+#tabs button.on{color:var(--navy);font-weight:700}
+#tabs button.on .ic{filter:none;opacity:1}
+
+.card{background:var(--card);border-radius:18px;padding:16px;margin-top:12px;box-shadow:0 1px 3px rgba(20,60,90,.06)}
+.cttl{font-size:15px;font-weight:700;margin:0 0 10px;display:flex;align-items:center;gap:6px}
+.cttl small{font-weight:400;color:var(--sub);margin-left:auto;font-size:12px}
+.av{display:inline-grid;place-items:center;border-radius:50%;color:#fff;flex:none}
+
+/* home band */
+.band{margin-top:12px;border-radius:20px;padding:14px 14px 12px;color:#fff;
+  background:linear-gradient(135deg,#1aa0d8 0%,#1478b8 55%,#145b86 100%);box-shadow:0 4px 14px rgba(20,100,160,.25)}
+.band .bt{font-size:12.5px;opacity:.9;text-align:center}
+.band .bbig{text-align:center;font-size:26px;font-weight:700;line-height:1.3}
+.band .bbig small{display:block;font-size:13px;font-weight:500;opacity:.9}
+.band .bsub{font-size:12.5px;opacity:.9;margin:10px 0 6px;display:flex;justify-content:space-between}
+.fam3{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.fcell{background:rgba(255,255,255,.14);border-radius:14px;padding:9px 4px 8px;display:flex;flex-direction:column;align-items:center;color:#fff;position:relative;min-height:118px}
+.fcell.mine{background:rgba(255,255,255,.24)}
+.fcell .av{width:40px;height:40px;font-size:22px;border:2px solid rgba(255,255,255,.85)}
+.fcell .chk{position:absolute;top:6px;right:8px;background:#fff;color:var(--ok);border-radius:50%;width:20px;height:20px;font-size:13px;font-weight:700;display:grid;place-items:center}
+.fcell .fn{font-size:13px;font-weight:700;margin-top:3px}
+.fcell .fv{font-size:15px;font-weight:700;line-height:1.25;text-align:center}
+.fcell .fv small{display:block;font-size:11px;font-weight:400;opacity:.9}
+.fcell .none{font-size:12px;opacity:.75}
+.fcell .fnow{font-size:11px;min-height:16px;color:#fff;text-align:center}
+.fcell .fnow b{display:inline-block;width:7px;height:7px;background:#ff5a5a;border-radius:50%;margin-right:3px;animation:pulse 1.2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.25}}
+
+/* timer */
+.trow{display:flex;align-items:center;gap:8px}
+.seg{display:flex;background:#eef2f5;border-radius:12px;padding:3px;flex:1}
+.seg button{flex:1;padding:7px 4px;border-radius:9px;font-size:14px;color:#556}
+.seg button.on{background:#fff;color:var(--ink);font-weight:700;box-shadow:0 1px 3px rgba(0,0,0,.08)}
+.icobtn{width:42px;height:42px;border-radius:50%;background:#eef2f5;font-size:19px;flex:none}
+.presets{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.presets button{padding:5px 11px;border-radius:99px;background:#eef2f5;font-size:13px}
+.presets button.on{background:var(--pri);color:#fff;font-weight:700}
+.dial{position:relative;width:min(290px,78vw);aspect-ratio:1;margin:8px auto 0}
+.dial svg{width:100%;height:100%;display:block}
+.dial .bgarc{fill:none;stroke:#e9eef2;stroke-width:16;stroke-linecap:round}
+.dial .fgarc{fill:none;stroke:var(--pri);stroke-width:16;stroke-linecap:round;transition:stroke-dasharray .25s linear}
+.dialin{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;padding-top:6px}
+#big{font-size:clamp(40px,12.5vw,58px);font-weight:700;font-variant-numeric:tabular-nums;letter-spacing:.01em;line-height:1.1;font-family:"SF Pro Rounded","Roboto",system-ui,sans-serif}
+#hen{font-size:22px;font-weight:700;color:#3d5366;margin-top:2px;font-variant-numeric:tabular-nums}
+#tsub{font-size:12px;color:var(--sub);margin-top:4px;text-align:center;min-height:18px}
+.btns{display:flex;justify-content:space-between;align-items:center;margin-top:-14px;padding:0 4px}
+.cbtn{width:76px;height:76px;border-radius:50%;background:#eef2f5;font-size:15px;font-weight:600}
+.cbtn:active,.mbtn:active{transform:scale(.96)}
+.mbtn{width:116px;height:116px;border-radius:50%;background:var(--pri);color:#fff;font-size:21px;font-weight:700;box-shadow:0 6px 16px rgba(20,145,204,.35)}
+.mbtn.run{background:#e8604f;box-shadow:0 6px 16px rgba(232,96,79,.35)}
+.mytot{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+.mytot div{background:var(--soft);border-radius:12px;padding:8px 10px}
+.mytot small{display:block;color:var(--sub);font-size:11.5px}
+.mytot b{font-size:16px}
+.mytot i{font-style:normal;display:block;font-size:12px;color:#3d5366}
+
+/* stats */
+.chips{display:flex;gap:6px;margin-top:12px;overflow-x:auto;padding-bottom:2px}
+.chips button{flex:none;display:flex;align-items:center;gap:4px;padding:5px 12px 5px 5px;border-radius:99px;background:#fff;border:1.5px solid var(--line);font-size:14px}
+.chips button .av{width:24px;height:24px;font-size:14px}
+.chips button.on{border-color:var(--c,var(--navy));background:var(--c,var(--navy));color:#fff;font-weight:700}
+.subtabs{display:grid;grid-template-columns:repeat(4,1fr);margin-top:10px;background:#fff;border-radius:14px;overflow:hidden;border:1px solid var(--line)}
+.subtabs button{padding:9px 0;font-size:14px;color:#8795a3;border-bottom:3px solid transparent}
+.subtabs button.on{color:var(--ink);font-weight:700;border-bottom-color:var(--pri)}
+.nav{display:flex;align-items:center;justify-content:center;gap:16px;margin:2px 0 8px}
+.nav b{font-size:17px;min-width:120px;text-align:center}
+.nav button{width:34px;height:34px;border-radius:50%;background:var(--pri);color:#fff;font-size:16px;font-weight:700}
+.cal{display:grid;grid-template-columns:repeat(7,1fr);gap:2px}
+.cal .wh{text-align:center;font-size:12px;color:var(--sub);padding-bottom:2px}
+.cal .wh.su,.cd.su .dn{color:#d9534f}.cal .wh.sa,.cd.sa .dn{color:#2b7bd6}
+.cd{display:flex;flex-direction:column;align-items:center;padding:3px 0 2px;border-radius:10px;min-height:52px}
+.cd .dots{height:8px;display:flex;gap:2px}
+.cd .dots i{width:7px;height:7px;border-radius:50%;display:block}
+.cd .dn{font-size:15px;line-height:1.5}
+.cd .dm{font-size:10px;color:var(--pri2);font-weight:700;line-height:1}
+.cd.td .dn{background:var(--navy);color:#fff!important;border-radius:50%;width:26px;height:24px;display:grid;place-items:center}
+.cd.sel{background:var(--soft);outline:2px solid var(--pri)}
+.cd.fu .dn{color:#b5c0ca}
+.tot{display:flex;justify-content:space-between;align-items:center;padding:4px 2px}
+.tot .tv{text-align:right;font-weight:700;font-size:18px;line-height:1.3}
+.tot .tv small{display:block;font-size:13px;color:var(--sub);font-weight:500}
+.tl{margin:6px 0 4px}
+.lane{display:flex;align-items:center;gap:6px;margin-bottom:5px}
+.lane .ln{width:40px;font-size:12px;text-align:right;flex:none}
+.lane .bar{position:relative;flex:1;height:18px;background:#eef2f5;border-radius:6px;overflow:hidden;
+  background-image:linear-gradient(to right,transparent calc(25% - 1px),#d9e1e8 calc(25% - 1px),#d9e1e8 25%,transparent 25%,transparent calc(50% - 1px),#d9e1e8 calc(50% - 1px),#d9e1e8 50%,transparent 50%,transparent calc(75% - 1px),#d9e1e8 calc(75% - 1px),#d9e1e8 75%,transparent 75%)}
+.lane .bar i{position:absolute;top:2px;bottom:2px;border-radius:4px;min-width:4px}
+.tlax{display:flex;justify-content:space-between;font-size:10px;color:var(--sub);margin-left:0}
+.tlax.ind{margin-left:46px}
+.recs{margin-top:8px}
+.rec{display:flex;align-items:center;gap:8px;padding:9px 2px;border-top:1px solid var(--line)}
+.rec .rt{font-variant-numeric:tabular-nums;font-size:14px;min-width:94px;color:#3d5366}
+.rec .rw{font-size:13px;font-weight:700}
+.rec .rv{flex:1;text-align:right;font-weight:700;font-size:15px;line-height:1.3}
+.rec .rv small{display:block;font-weight:400;font-size:12px;color:var(--sub)}
+.rec .ed{width:36px;height:36px;border-radius:50%;background:#eef2f5;font-size:15px;flex:none}
+.rmemo{font-size:12.5px;color:var(--sub);padding:0 4px 8px 4px;margin-top:-4px}
+.tag{font-size:10px;background:#fff3dd;color:#a76a00;border-radius:6px;padding:1px 5px}
+.addbtn{width:100%;margin-top:10px;padding:11px;border-radius:12px;border:1.5px dashed var(--pri);color:var(--pri2);font-weight:700;background:#f6fbfe}
+.dlist .di{display:flex;align-items:center;gap:12px;padding:9px 0;border-top:1px solid var(--line);width:100%;text-align:left}
+.dlist .dc{width:52px;height:52px;border-radius:50%;background:var(--pri);color:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;flex:none;line-height:1.1}
+.dlist .dc b{font-size:19px}.dlist .dc small{font-size:10px}
+.dlist .dv{flex:1}
+.dlist .dv b{font-size:16px}
+.dlist .dv small{display:block;color:var(--sub);font-size:13px}
+.pp{display:flex;gap:4px;flex-wrap:wrap;margin-top:2px}
+.pp span{font-size:11px;border-radius:6px;padding:0 5px;color:#fff}
+.sorter{font-size:13px;color:var(--pri2);font-weight:700}
+.mchart{width:100%;height:auto;display:block}
+.mchart .gl{stroke:#e8edf2;stroke-width:1}
+.mchart .ax{font-size:10px;fill:#7b8a99}
+.mchart .bv{font-size:9.5px;fill:#0c6fa3;font-weight:700}
+.mrow{display:flex;justify-content:space-between;align-items:center;padding:10px 2px;border-top:1px solid var(--line);width:100%;text-align:left}
+.mrow .tv{text-align:right;font-weight:700;line-height:1.3}
+.mrow .tv small{display:block;font-size:12.5px;color:var(--sub);font-weight:500}
+.legend{display:flex;align-items:center;gap:4px;font-size:11px;color:var(--sub);justify-content:flex-end;margin-bottom:6px}
+.legend i{width:13px;height:13px;border-radius:3px;display:inline-block}
+.ygrid{display:grid;grid-template-columns:1fr 1fr;gap:12px 14px}
+.ymh{display:flex;justify-content:space-between;align-items:baseline;font-size:13px}
+.ymh small{color:var(--sub);font-size:11px}
+.yg{display:grid;grid-template-columns:repeat(7,1fr);gap:3px;margin-top:3px}
+.yg .w{font-size:8.5px;color:#9aa7b3;text-align:center;line-height:1.2}
+.yg i{display:block;aspect-ratio:1.25;border-radius:4px;background:#e8edf2}
+.yg i.e{background:transparent}
+.yg i.l1,.yg i.l2,.yg i.l3,.yg i.l4{background:var(--hc)}
+.yg i.l1{opacity:.3}.yg i.l2{opacity:.55}.yg i.l3{opacity:.8}.yg i.l4{opacity:1}
+.yg i.td{outline:2px solid var(--ink);outline-offset:-1px}
+.yg i.fu{background:#f4f6f8}
+.lg i.l1{opacity:.3}.lg i.l2{opacity:.55}.lg i.l3{opacity:.8}
+.field{display:flex;justify-content:space-between;align-items:center;padding:10px 2px;border-bottom:1px solid var(--line)}
+.field input[type=date]{border:1px solid var(--line);border-radius:10px;padding:6px 8px;background:#fff}
+.quick{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}
+.quick button{padding:5px 12px;border-radius:99px;background:#eef2f5;font-size:13px}
+.big2{text-align:right;font-size:30px;font-weight:700;line-height:1.25}
+.big2 small{display:block;font-size:22px;color:#3d5366}
+.brk{margin-top:10px}
+.brk .br{display:flex;align-items:center;gap:8px;margin:7px 0;font-size:13px}
+.brk .br .bb{flex:1;height:12px;background:#eef2f5;border-radius:6px;overflow:hidden}
+.brk .br .bb i{display:block;height:100%;border-radius:6px}
+.brk .br .bvv{min-width:120px;text-align:right}
+.note{font-size:12.5px;color:var(--sub);margin-top:8px}
+
+/* prayers */
+.pcount{font-size:11px;background:rgba(0,0,0,.08);border-radius:99px;padding:0 6px;margin-left:3px}
+.tg{display:flex;align-items:center;gap:8px;margin-top:10px;font-size:13.5px;color:#3d5366}
+.sw{width:44px;height:26px;border-radius:99px;background:#cfd8e0;position:relative;flex:none;transition:.2s}
+.sw::after{content:"";position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;background:#fff;transition:.2s;box-shadow:0 1px 2px rgba(0,0,0,.2)}
+.sw.on{background:var(--pri)}.sw.on::after{left:21px}
+.pcard{background:#fff;border-radius:16px;padding:14px 14px 12px;margin-top:10px;border-left:5px solid var(--c);box-shadow:0 1px 3px rgba(20,60,90,.06)}
+.pcard .ph{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--sub)}
+.pcard .ph .av{width:22px;height:22px;font-size:12px}
+.pcard .ph .vis{margin-left:auto}
+.pcard h4{margin:6px 0 2px;font-size:17px;line-height:1.45}
+.pcard .pb{white-space:pre-wrap;font-size:14px;color:#3d4c5a;margin:4px 0}
+.pcard .due{font-size:13px;color:var(--pri2);margin-top:4px}
+.pcard .due .over{color:var(--warn);font-weight:700}
+.pcard .res{margin-top:8px;padding:8px 10px;border-radius:10px;font-size:13.5px}
+.pcard .res.yes{background:#e8f6ee;color:#1f7a45}.pcard .res.no{background:#f3f1f1;color:#6b5f5f}
+.pact{display:flex;gap:8px;margin-top:10px}
+.pact button{flex:1;padding:8px 4px;border-radius:10px;font-size:14px;font-weight:700}
+.pact .y{background:#e8f6ee;color:#1f7a45}.pact .n{background:#f1f3f5;color:#5d6b78}.pact .e{flex:none;width:44px;background:#eef2f5}
+.bigbtn{display:block;width:100%;margin:16px 0 4px;padding:14px;border-radius:99px;background:var(--pri);color:#fff;font-size:17px;font-weight:700;box-shadow:0 4px 12px rgba(20,145,204,.3)}
+.empty{text-align:center;color:var(--sub);padding:34px 10px 10px;font-size:14px}
+.empty .ei{font-size:52px;display:block;margin-bottom:4px}
+
+/* settings */
+.srow{padding:12px 0;border-bottom:1px solid var(--line)}
+.srow:last-child{border-bottom:0}
+.srow .sl{font-weight:700;font-size:14.5px;margin-bottom:7px}
+.srow .sd{font-size:12.5px;color:var(--sub);margin-top:6px}
+.numin{width:80px;border:1px solid var(--line);border-radius:10px;padding:7px 9px;text-align:right}
+.btn2{padding:9px 14px;border-radius:10px;background:#eef2f5;font-size:14px;font-weight:700;margin:4px 6px 0 0}
+
+/* modal */
+#modal .mbg{position:fixed;inset:0;background:rgba(10,25,40,.45);z-index:50}
+#modal .mbox{position:fixed;left:50%;bottom:0;transform:translateX(-50%);width:min(540px,100%);max-height:92vh;overflow:auto;background:#fff;border-radius:22px 22px 0 0;z-index:51;padding:18px 18px calc(18px + env(safe-area-inset-bottom));animation:up .2s ease-out}
+@keyframes up{from{transform:translate(-50%,40px);opacity:0}}
+.mbox h3{margin:0 0 10px;font-size:18px}
+.mbox label.fl{display:block;font-size:13px;color:var(--sub);margin:12px 0 4px;font-weight:700}
+.mbox input[type=text],.mbox input[type=date],.mbox input[type=time],.mbox input[type=number],.mbox textarea{width:100%;border:1.5px solid var(--line);border-radius:12px;padding:10px 12px;background:#fbfcfd;font-size:16px}
+.mbox textarea{min-height:88px;resize:vertical}
+.durin{display:flex;align-items:center;gap:6px}
+.durin input{width:90px!important;text-align:right}
+.calc{margin-top:6px;font-weight:700;color:var(--pri2)}
+.mbtns{display:flex;gap:8px;margin-top:18px}
+.mbtns button{flex:1;padding:12px;border-radius:12px;font-weight:700;background:#eef2f5}
+.mbtns .pri{background:var(--pri);color:#fff}
+.mbtns .del{flex:none;background:#fdecea;color:var(--warn);padding:12px 14px}
+.whos{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:8px}
+.whos button{display:flex;flex-direction:column;align-items:center;gap:6px;padding:14px 4px;border-radius:16px;border:2px solid var(--line);font-weight:700}
+.whos button.on{border-color:var(--c);background:color-mix(in srgb,var(--c) 10%,#fff)}
+.whos .av{width:52px;height:52px;font-size:28px}
+.wseg{display:flex;gap:6px;flex-wrap:wrap}
+.wseg button{display:flex;align-items:center;gap:4px;padding:5px 12px 5px 5px;border-radius:99px;border:1.5px solid var(--line);font-size:14px}
+.wseg button .av{width:24px;height:24px;font-size:14px}
+.wseg button.on{background:var(--c,var(--pri));border-color:var(--c,var(--pri));color:#fff;font-weight:700}
+.wseg.plain button{padding:6px 14px}
+
+#toast{position:fixed;left:50%;top:calc(64px + env(safe-area-inset-top));transform:translateX(-50%) translateY(-20px);background:rgba(20,40,60,.92);color:#fff;padding:10px 18px;border-radius:99px;font-size:14px;opacity:0;pointer-events:none;transition:.25s;z-index:60;max-width:90vw;text-align:center}
+#toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.confetti{position:fixed;inset:0;pointer-events:none;z-index:70;overflow:hidden}
+.confetti span{position:absolute;top:-30px;font-size:26px;animation:fall 1.8s ease-in forwards}
+@keyframes fall{to{transform:translateY(110vh) rotate(540deg);opacity:.6}}
+</style>
+</head>
+<body>
+<header id="hdr"></header>
+<main class="wrap" id="main"></main>
+<nav id="tabs"></nav>
+<div id="modal"></div>
+<div id="toast"></div>
+<script type="module">
+/* ============================================================
+   お題目帳(家族3人で共有する唱題記録アプリ)
+   1分 = 30遍 で計算
+   ============================================================ */
+const COL = 'daimoku-family';
+const FB_VER = '10.12.2';
+const CFG = {
+  apiKey: "AIzaSyD1sbGfrdUw6HoKlWNWl099-JMzlwfRMLs",
+  authDomain: "dokuryo-cho.firebaseapp.com",
+  projectId: "dokuryo-cho",
+  storageBucket: "dokuryo-cho.firebasestorage.app",
+  messagingSenderId: "851503769517",
+  appId: "1:851503769517:web:71f1616be8b5d3ea982324"
+};
+const HEN_PER_MIN = 30;
+const hen = sec => Math.floor(Math.max(0, sec) * HEN_PER_MIN / 60);
+
+const PEOPLE = [
+  { id: 'papa',  name: 'パパ', rb: 'パパ',            color: '#2b7bd6', emoji: '👨' },
+  { id: 'mama',  name: 'ママ', rb: 'ママ',            color: '#e0607e', emoji: '👩' },
+  { id: 'aisei', name: '藍世', rb: '{藍世|あいせい}', color: '#f0a030', emoji: '👧' },
+];
+const P = id => PEOPLE.find(p => p.id === id) || PEOPLE[0];
+
+const LOCAL_ONLY = new URLSearchParams(location.search).has('local');
+const K = s => 'odaimoku-' + s + (LOCAL_ONLY ? '-test' : '');
+const lsGet = (k, d) => { try { const v = localStorage.getItem(k); return v ? JSON.parse(v) : d; } catch (e) { return d; } };
+const lsSet = (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} };
+
+let L = Object.assign({ me: null, furi: null, goal: 10, sound: true }, lsGet(K('local'), {}));
+const saveL = () => lsSet(K('local'), L);
+const furiOn = () => (L.furi === null || L.furi === undefined) ? L.me === 'aisei' : !!L.furi;
+
+/* ---------- ふりがな ---------- */
+const RB = /\{([^{}|]+)\|([^{}]+)\}/g;
+const T = s => s.replace(RB, (m, k, r) => furiOn() ? `<ruby>${k}<rt>${r}</rt></ruby>` : k);
+const plain = s => s.replace(RB, '$1');
+const esc = s => String(s ?? '').replace(/[&<>"'{}]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;', '{': '&#123;', '}': '&#125;' }[c]));
+const DAYR = { 1: 'ついたち', 2: 'ふつか', 3: 'みっか', 4: 'よっか', 5: 'いつか', 6: 'むいか', 7: 'なのか', 8: 'ようか', 9: 'ここのか', 10: 'とおか', 14: 'じゅうよっか', 20: 'はつか', 24: 'にじゅうよっか' };
+const dayRb = d => DAYR[d] ? `{${d}日|${DAYR[d]}}` : `${d}{日|にち}`;
+const daysRb = n => n === 1 ? `{1日|いちにち}` : dayRb(n);
+const fun = n => (n > 0 && [0, 1, 3, 4, 6, 8].includes(n % 10)) ? 'ぷん' : 'ふん';
+const ben = n => { if (n > 0 && n % 1000 === 0) return 'べん'; const l = n % 10; if (n > 0 && [0, 1, 6, 8].includes(l)) return 'ぺん'; if (l === 3) return 'べん'; return 'へん'; };
+const WD = ['日', '月', '火', '水', '木', '金', '土'], WDR = ['にち', 'げつ', 'か', 'すい', 'もく', 'きん', 'ど'];
+const wdRb = i => `{${WD[i]}|${WDR[i]}}`;
+
+/* ---------- 表示用 ---------- */
+const pad = n => String(n).padStart(2, '0');
+const ymd = dt => `${dt.getFullYear()}-${pad(dt.getMonth() + 1)}-${pad(dt.getDate())}`;
+const today = () => ymd(new Date());
+const parseD = s => { const [y, m, d] = s.split('-').map(Number); return new Date(y, m - 1, d); };
+const addDays = (s, n) => { const d = parseD(s); d.setDate(d.getDate() + n); return ymd(d); };
+const dateRb = s => { const dt = parseD(s); return `${dt.getMonth() + 1}{月|がつ}${dayRb(dt.getDate())}(${wdRb(dt.getDay())})`; };
+const ymRb = ym => { const [y, m] = ym.split('-').map(Number); return `${y}{年|ねん}${m}{月|がつ}`; };
+const dispT = s => s.replace(/^0(\d)/, '$1');
+const endT = r => { const [h, m] = r.s.split(':').map(Number); const t = (h * 60 + m + Math.round(r.sec / 60)) % 1440; return `${Math.floor(t / 60)}:${pad(t % 60)}`; };
+const hms = sec => { sec = Math.floor(sec); return `${pad(Math.floor(sec / 3600))}:${pad(Math.floor(sec % 3600 / 60))}:${pad(sec % 60)}`; };
+function fmtDur(sec) {
+  sec = Math.max(0, Math.round(sec));
+  if (sec < 60) return sec > 0 ? `${sec}{秒|びょう}` : `0{分|ふん}`;
+  const h = Math.floor(sec / 3600), m = Math.floor(sec % 3600 / 60);
+  if (h > 0) return `${h}{時間|じかん}${m ? `${m}{分|${fun(m)}}` : ''}`;
+  return `${m}{分|${fun(m)}}`;
+}
+function fmtHen(n, exact) {
+  if (!exact && n >= 10000) {
+    const v = n / 10000, s = v >= 100 ? String(Math.round(v)) : v.toFixed(1).replace(/\.0$/, '');
+    return `${s}{万遍|まんべん}`;
+  }
+  return `${n.toLocaleString('ja-JP')}{遍|${ben(n)}}`;
+}
+const newId = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
+
+/* ============================================================
+   データ(Firestore:コレクション daimoku-family)
+   rec_<だれ>_<yyyymm> : { recs: { id: {who,d,s,sec,memo,m,at} } }
+   prayers             : { items: { id: {...} } }
+   live                : { papa: {rs,acc,at} | null, ... }
+   ============================================================ */
+let DOCS = lsGet(K('cache'), {});
+let PENDING = lsGet(K('pending'), []);
+let MODE = LOCAL_ONLY ? 'local' : 'connecting', MODE_NOTE = LOCAL_ONLY ? 'テストモード(?local=1)' : '';
+let fs = null, db = null;
+let RECS = [], BYDAY = {};
+
+function rebuild() {
+  RECS = [];
+  for (const [id, doc] of Object.entries(DOCS)) {
+    if (!id.startsWith('rec_') || !doc || !doc.recs) continue;
+    for (const [rid, r] of Object.entries(doc.recs)) if (r && r.d && r.who) RECS.push({ ...r, id: rid });
+  }
+  RECS.sort((a, b) => (a.d + a.s).localeCompare(b.d + b.s));
+  BYDAY = {};
+  for (const r of RECS) (BYDAY[r.d] || (BYDAY[r.d] = [])).push(r);
+}
+const recsOf = (who, d) => (BYDAY[d] || []).filter(r => who === 'all' || r.who === who);
+const recsWhere = (who, f) => RECS.filter(r => (who === 'all' || r.who === who) && f(r));
+const sumSec = a => a.reduce((x, r) => x + (r.sec || 0), 0);
+const sumHen = a => a.reduce((x, r) => x + hen(r.sec || 0), 0);
+const prayers = () => Object.entries((DOCS.prayers && DOCS.prayers.items) || {}).filter(([, v]) => v).map(([id, v]) => ({ ...v, id }));
+const recDoc = r => `rec_${r.who}_${r.d.slice(0, 7).replace('-', '')}`;
+const saveCache = () => lsSet(K('cache'), DOCS);
+
+function applyLocal(o) {
+  if (o.t === 'merge') {
+    const cur = DOCS[o.doc] || (DOCS[o.doc] = {});
+    for (const [k, v] of Object.entries(o.data)) {
+      if (v && typeof v === 'object' && cur[k] && typeof cur[k] === 'object') cur[k] = { ...cur[k], ...v };
+      else cur[k] = v;
+    }
+  } else if (o.t === 'del') {
+    const cur = DOCS[o.doc]; const [a, b] = o.path.split('.');
+    if (cur && cur[a]) { cur[a] = { ...cur[a] }; delete cur[a][b]; }
+  }
+}
+function remote(o) {
+  if (!fs || !db) return Promise.reject(new Error('no db'));
+  const ref = fs.doc(db, COL, o.doc);
+  if (o.t === 'merge') return fs.setDoc(ref, o.data, { merge: true });
+  return fs.updateDoc(ref, { [o.path]: fs.deleteField() }).catch(e => { if (e && e.code === 'not-found') return; throw e; });
+}
+function queue(o) { if (o.live || LOCAL_ONLY) return; PENDING.push(o); lsSet(K('pending'), PENDING); }
+function op(o, quiet) {
+  applyLocal(o); rebuild(); saveCache();
+  if (MODE === 'cloud') remote(o).catch(e => { console.warn('write failed', e); queue(o); });
+  else queue(o);
+  if (!quiet) render();
+}
+async function flush() {
+  if (!PENDING.length) return;
+  const list = PENDING; PENDING = []; lsSet(K('pending'), []);
+  for (const o of list) {
+    try { await Promise.race([remote(o), new Promise(r => setTimeout(r, 3000))]); }
+    catch (e) { console.warn(e); queue(o); }
+  }
+}
+function setMode(m, note) { MODE = m; MODE_NOTE = note || ''; renderHeader(); if (CUR === 'set') render(); }
+
+async function initFirebase() {
+  if (LOCAL_ONLY) return;
+  try {
+    const timeout = new Promise((_, rej) => setTimeout(() => rej(new Error('timeout')), 10000));
+    const [A, F] = await Promise.race([Promise.all([
+      import(`https://www.gstatic.com/firebasejs/${FB_VER}/firebase-app.js`),
+      import(`https://www.gstatic.com/firebasejs/${FB_VER}/firebase-firestore.js`)]), timeout]);
+    const app = A.initializeApp(CFG, 'odaimoku-cho');
+    let d;
+    try { d = F.initializeFirestore(app, { localCache: F.persistentLocalCache({ tabManager: F.persistentMultipleTabManager() }) }); }
+    catch (e) { d = F.getFirestore(app); }
+    fs = F; db = d;
+    const slow = setTimeout(() => { if (MODE !== 'cloud') setMode('local', 'つながるまで、この端末に保存しています'); }, 12000);
+    let unsub = null;
+    unsub = F.onSnapshot(F.collection(db, COL), { includeMetadataChanges: true }, snap => {
+      const nd = {}; snap.forEach(x => nd[x.id] = x.data());
+      const fromCache = snap.metadata.fromCache;
+      if (!(fromCache && snap.empty && Object.keys(DOCS).length)) { DOCS = nd; rebuild(); saveCache(); }
+      clearTimeout(slow);
+      const wasCloud = MODE === 'cloud';
+      MODE = 'cloud'; MODE_NOTE = fromCache ? 'オフライン中(つながったら送ります)' : '';
+      if (!wasCloud) flush();
+      renderHeader(); render();
+    }, err => {
+      clearTimeout(slow); console.warn(err);
+      setMode('local', err && err.code === 'permission-denied'
+        ? 'Firestoreのルールに daimoku-family が追加されていません'
+        : 'クラウドにつながりません(' + (err && err.code || 'error') + ')');
+      if (unsub) unsub();
+    });
+  } catch (e) {
+    console.warn(e);
+    setMode('local', 'インターネットにつながっていません');
+  }
+}
+
+/* ============================================================
+   ストップウォッチ/タイマー
+   ============================================================ */
+let TS = Object.assign({ mode: 'sw', running: false, acc: 0, rs: 0, first: 0, target: 10 }, lsGet(K('timer'), {}));
+const saveTS = () => lsSet(K('timer'), TS);
+const elapsed = () => TS.acc + (TS.running ? (Date.now() - TS.rs) / 1000 : 0);
+const tgtSec = () => TS.target * 60;
+
+function setLive(on) {
+  if (MODE !== 'cloud' || !L.me) return;
+  op({ t: 'merge', doc: 'live', live: true, data: { [L.me]: on ? { rs: TS.rs, acc: TS.acc, at: Date.now() } : null } }, true);
+}
+function liveOf(id) {
+  const l = DOCS.live && DOCS.live[id];
+  if (!l || !l.rs || Date.now() - l.rs > 4 * 3600e3) return null;
+  return (l.acc || 0) + (Date.now() - l.rs) / 1000;
+}
+let AC = null;
+function ensureAudio() { try { if (!AC) AC = new (window.AudioContext || window.webkitAudioContext)(); if (AC.state === 'suspended') AC.resume(); } catch (e) {} }
+function bell() {
+  if (navigator.vibrate) navigator.vibrate([300, 150, 300]);
+  if (!L.sound || !AC) return;
+  [0, 1.4].forEach(delay => {
+    const t = AC.currentTime + delay;
+    [[523.25, 1], [1046.5, .45], [1568, .2], [2093, .1]].forEach(([f, g]) => {
+      const o = AC.createOscillator(), v = AC.createGain();
+      o.type = 'sine'; o.frequency.value = f;
+      v.gain.setValueAtTime(0.0001, t); v.gain.exponentialRampToValueAtTime(0.35 * g, t + 0.015);
+      v.gain.exponentialRampToValueAtTime(0.0001, t + 3.2);
+      o.connect(v).connect(AC.destination); o.start(t); o.stop(t + 3.3);
+    });
+  });
+}
+let WL = null;
+async function wake(on) {
+  try {
+    if (on && 'wakeLock' in navigator) { if (!WL) { WL = await navigator.wakeLock.request('screen'); WL.addEventListener('release', () => { WL = null; }); } }
+    else if (!on && WL) { await WL.release(); WL = null; }
+  } catch (e) {}
+}
+function tStart() {
+  ensureAudio();
+  if (!L.me) return whoModal();
+  if (TS.mode === 'tm' && elapsed() >= tgtSec()) { toast('タイマーが おわっています。{保存|ほぞん}か リセットしてね'); return; }
+  const now = Date.now();
+  if (!TS.first) TS.first = now;
+  TS.running = true; TS.rs = now; saveTS(); wake(true); setLive(true); tick();
+}
+function tStop() {
+  if (!TS.running) return;
+  TS.acc += (Date.now() - TS.rs) / 1000;
+  if (TS.mode === 'tm') TS.acc = Math.min(TS.acc, tgtSec());
+  TS.running = false; saveTS(); wake(false); setLive(false); tick();
+}
+function tClear() { Object.assign(TS, { running: false, acc: 0, rs: 0, first: 0 }); saveTS(); wake(false); }
+function tReset() {
+  if (elapsed() >= 10 && !confirm('保存しないで 0 にもどしますか?')) return;
+  const wasRun = TS.running; tClear(); if (wasRun) setLive(false); render();
+}
+function tSave() {
+  if (TS.running) tStop();
+  const sec = Math.floor(elapsed());
+  if (sec < 1) { toast('まだ{記録|きろく}がありません'); return; }
+  if (!L.me) return whoModal();
+  const st = new Date(TS.first || (Date.now() - sec * 1000));
+  const rec = { who: L.me, d: ymd(st), s: `${pad(st.getHours())}:${pad(st.getMinutes())}`, sec, memo: '', m: false, at: Date.now() };
+  tClear();
+  op({ t: 'merge', doc: recDoc(rec), data: { recs: { [newId()]: rec } } });
+  toast(`{保存|ほぞん}しました! ${fmtDur(sec)}・${fmtHen(hen(sec), true)}`);
+}
+
+const ARC_R = 110, ARC_C = 2 * Math.PI * ARC_R, ARC_L = ARC_C * 0.75;
+function tick() {
+  const tm = TS.mode === 'tm', tgt = tgtSec();
+  if (tm && TS.running && elapsed() >= tgt) {
+    TS.acc = tgt; TS.running = false; saveTS(); wake(false); setLive(false); bell();
+    toast('タイマー{終了|しゅうりょう}! {保存|ほぞん}を おしてね');
+  }
+  if (CUR !== 'home') return;
+  const e = Math.min(elapsed(), tm ? tgt : Infinity);
+  const big = document.getElementById('big'); if (!big) return;
+  big.textContent = hms(tm ? Math.max(0, tgt - e) : e);
+  document.getElementById('hen').innerHTML = T(fmtHen(hen(Math.floor(e)), true));
+  let p, sub;
+  if (tm) {
+    p = tgt ? e / tgt : 0;
+    sub = `{経過|けいか} ${hms(e).slice(3)} / ${TS.target}{分|${fun(TS.target)}}`;
+  } else {
+    const done = sumSec(recsOf(L.me, today())) + e, goal = L.goal * 60;
+    p = goal ? Math.min(1, done / goal) : 0;
+    const left = Math.ceil((goal - done) / 60);
+    sub = goal ? (done >= goal ? `きょうの{目標|もくひょう}たっせい! 🎉` : `きょうの{目標|もくひょう} ${L.goal}{分|${fun(L.goal)}}まで あと${left}{分|${fun(left)}}`) : '';
+  }
+  const arc = document.getElementById('arc');
+  arc.setAttribute('stroke-dasharray', `${(ARC_L * p).toFixed(1)} ${ARC_C.toFixed(1)}`);
+  arc.style.opacity = p > 0 ? 1 : 0;
+  document.getElementById('tsub').innerHTML = T(sub);
+  const b = document.getElementById('bStart');
+  b.textContent = TS.running ? 'ストップ' : (elapsed() > 0 && !(tm && e >= tgt) ? 'つづける' : 'スタート');
+  b.classList.toggle('run', TS.running);
+  for (const pp of PEOPLE) {
+    const el = document.getElementById('fnow-' + pp.id); if (!el) continue;
+    const lv = pp.id === L.me ? (TS.running ? elapsed() : null) : liveOf(pp.id);
+    el.innerHTML = lv !== null ? T(`<b></b>{唱題中|しょうだいちゅう} ${hms(lv).replace(/^00:/, '')}`) : '';
+  }
+}
+setInterval(tick, 250);
+
+/* ============================================================
+   画面
+   ============================================================ */
+let CUR = 'home';
+const ST = { who: null, sub: 'day', ym: today().slice(0, 7), sel: today(), y: new Date().getFullYear(), from: today().slice(0, 8) + '01', to: today(), desc: true };
+const PR = { tab: 'praying', fam: true };
+const $main = document.getElementById('main');
+let needRender = false;
+
+function renderHeader() {
+  const me = L.me ? P(L.me) : null;
+  const ml = MODE === 'cloud' ? '☁️ {家族|かぞく}で{共有中|きょうゆうちゅう}' : MODE === 'local' ? '📱 この{端末|たんまつ}だけ' : '…{接続中|せつぞくちゅう}';
+  document.getElementById('hdr').innerHTML = T(`<div class="hd">
+    <div class="ttl">お{題目帳|だいもくちょう}</div>
+    <span class="mode ${MODE}">${ml}</span>
+    <button class="me" data-act="who">${me ? `<span class="av" style="background:${me.color}">${me.emoji}</span>${me.rb}` : 'だれ?'}</button></div>`);
+}
+function renderNav() {
+  const tabs = [['home', '🙏', 'ホーム'], ['stats', '📊', '{題目|だいもく}{実績|じっせき}'], ['pray', '📝', '{御祈念|ごきねん}{項目|こうもく}'], ['set', '⚙️', 'せってい']];
+  document.getElementById('tabs').innerHTML = T(`<div class="in">${tabs.map(([k, i, l]) =>
+    `<button class="${CUR === k ? 'on' : ''}" data-act="tab" data-v="${k}"><span class="ic">${i}</span><span>${l}</span></button>`).join('')}</div>`);
+}
+function render() {
+  const a = document.activeElement;
+  if (a && $main.contains(a) && /INPUT|TEXTAREA|SELECT/.test(a.tagName)) { needRender = true; return; }
+  needRender = false;
+  if (!ST.who) ST.who = L.me || 'all';
+  const v = { home: vHome, stats: vStats, pray: vPray, set: vSet }[CUR];
+  $main.innerHTML = T(v());
+  renderNav();
+  if (CUR === 'home') tick();
+}
+$main.addEventListener('focusout', () => setTimeout(() => { if (needRender) render(); }, 50));
+
+/* ---------- ホーム ---------- */
+function streak(who) {
+  let d = today(); if (!recsOf(who, d).length) d = addDays(d, -1);
+  let n = 0; while (recsOf(who, d).length) { n++; d = addDays(d, -1); }
+  return n;
+}
+function vHome() {
+  const td = today(), tm = TS.mode === 'tm';
+  const famCells = PEOPLE.map(p => {
+    const rs = recsOf(p.id, td), s = sumSec(rs);
+    return `<button class="fcell ${p.id === L.me ? 'mine' : ''}" data-act="famgo" data-v="${p.id}">
+      ${s ? '<span class="chk">✓</span>' : ''}
+      <span class="av" style="background:${p.color}">${p.emoji}</span>
+      <span class="fn">${p.rb}</span>
+      ${s ? `<span class="fv">${fmtDur(s)}<small>${fmtHen(sumHen(rs), true)}</small></span>` : `<span class="none">まだ</span>`}
+      <span class="fnow" id="fnow-${p.id}"></span></button>`;
+  }).join('');
+  const all = RECS;
+  const presets = [5, 10, 15, 20, 30, 45, 60];
+  const mine = L.me ? RECS.filter(r => r.who === L.me) : [];
+  const ym = td.slice(0, 7), yy = td.slice(0, 4);
+  const mm = mine.filter(r => r.d.startsWith(ym)), my = mine.filter(r => r.d.startsWith(yy));
+  const stk = L.me ? streak(L.me) : 0;
+  return `
+  <section class="band">
+    <div class="bt">{家族|かぞく}のお{題目|だいもく}・これまでの{合計|ごうけい}</div>
+    <div class="bbig">${fmtHen(sumHen(all))}<small>${fmtDur(sumSec(all))}</small></div>
+    <div class="bsub"><span>きょうの{家族|かぞく}(${dateRb(td)})</span><span>タップで{記録|きろく}へ</span></div>
+    <div class="fam3">${famCells}</div>
+  </section>
+  <section class="card">
+    <div class="trow">
+      <div class="seg"><button data-act="mode" data-v="sw" class="${!tm ? 'on' : ''}">ストップウォッチ</button><button data-act="mode" data-v="tm" class="${tm ? 'on' : ''}">タイマー</button></div>
+      <button class="icobtn" data-act="sound" title="${L.sound ? 'おと あり' : 'おと なし'}">${L.sound ? '🔔' : '🔕'}</button>
+    </div>
+    ${tm ? `<div class="presets">${presets.map(m => `<button data-act="target" data-v="${m}" class="${TS.target == m ? 'on' : ''}">${m}{分|${fun(m)}}</button>`).join('')}<button data-act="target" data-v="custom" class="${presets.includes(+TS.target) ? '' : 'on'}">${presets.includes(+TS.target) ? 'そのほか' : TS.target + '{分|' + fun(+TS.target) + '}'}</button></div>` : ''}
+    <div class="dial">
+      <svg viewBox="0 0 260 260"><circle class="bgarc" cx="130" cy="130" r="${ARC_R}" stroke-dasharray="${ARC_L.toFixed(1)} ${ARC_C.toFixed(1)}" transform="rotate(135 130 130)"/>
+      <circle id="arc" class="fgarc" cx="130" cy="130" r="${ARC_R}" stroke-dasharray="0 ${ARC_C.toFixed(1)}" transform="rotate(135 130 130)"/></svg>
+      <div class="dialin"><div id="big">00:00:00</div><div id="hen"></div><div id="tsub"></div></div>
+    </div>
+    <div class="btns">
+      <button class="cbtn" data-act="reset">リセット</button>
+      <button class="mbtn" id="bStart" data-act="startstop">スタート</button>
+      <button class="cbtn" data-act="save">{保存|ほぞん}</button>
+    </div>
+  </section>
+  ${L.me ? `<section class="card">
+    <div class="cttl">${P(L.me).emoji} わたしの{記録|きろく}<small>${stk ? `🔥 ${stk}{日|にち}れんぞく` : ''}</small></div>
+    <div class="mytot">
+      <div><small>きょう</small><b>${fmtDur(sumSec(recsOf(L.me, td)))}</b><i>${fmtHen(sumHen(recsOf(L.me, td)), true)}</i></div>
+      <div><small>{今月|こんげつ}</small><b>${fmtDur(sumSec(mm))}</b><i>${fmtHen(sumHen(mm))}</i></div>
+      <div><small>{今年|ことし}</small><b>${fmtDur(sumSec(my))}</b><i>${fmtHen(sumHen(my))}</i></div>
+      <div><small>これまで</small><b>${fmtDur(sumSec(mine))}</b><i>${fmtHen(sumHen(mine))}</i></div>
+    </div>
+    <button class="addbtn" data-act="addrec" data-v="${td}">＋ {手入力|てにゅうりょく}で{記録|きろく}を{追加|ついか}</button>
+  </section>` : ''}
+  <p class="note" style="text-align:center">1{分|ぷん} = 30{遍|ぺん}で{計算|けいさん}しています</p>`;
+}
+
+/* ---------- 題目実績 ---------- */
+function whoChips() {
+  const items = [...PEOPLE.map(p => [p.id, `<span class="av" style="background:${p.color}">${p.emoji}</span>${p.rb}`, p.color]),
+    ['all', `<span class="av" style="background:#145b86">👪</span>みんな`, '#145b86']];
+  return `<div class="chips">${items.map(([id, h, c]) => `<button style="--c:${c}" class="${ST.who === id ? 'on' : ''}" data-act="swho" data-v="${id}">${h}</button>`).join('')}</div>`;
+}
+function vStats() {
+  const subs = [['day', '{日別|ひべつ}'], ['month', '{月別|つきべつ}'], ['year', '{年別|ねんべつ}'], ['range', '{期間|きかん}{指定|してい}']];
+  const body = { day: vDay, month: vMonth, year: vYear, range: vRange }[ST.sub]();
+  return whoChips() + `<div class="subtabs">${subs.map(([k, l]) => `<button class="${ST.sub === k ? 'on' : ''}" data-act="ssub" data-v="${k}">${l}</button>`).join('')}</div>` + body;
+}
+const whoColor = () => ST.who === 'all' ? '#1491cc' : P(ST.who).color;
+
+function vDay() {
+  const [y, m] = ST.ym.split('-').map(Number);
+  const first = new Date(y, m - 1, 1), days = new Date(y, m, 0).getDate(), off = first.getDay(), td = today();
+  let cal = WD.map((w, i) => `<div class="wh ${i === 0 ? 'su' : i === 6 ? 'sa' : ''}">${wdRb(i)}</div>`).join('');
+  for (let i = 0; i < off; i++) cal += '<div></div>';
+  for (let d = 1; d <= days; d++) {
+    const ds = `${y}-${pad(m)}-${pad(d)}`, rs = recsOf(ST.who, ds), wd = (off + d - 1) % 7;
+    const whos = new Set(rs.map(r => r.who));
+    const dots = PEOPLE.filter(p => whos.has(p.id)).map(p => `<i style="background:${p.color}"></i>`).join('');
+    const cls = ['cd', wd === 0 ? 'su' : wd === 6 ? 'sa' : '', ds === td ? 'td' : '', ds === ST.sel ? 'sel' : '', ds > td ? 'fu' : ''].join(' ');
+    cal += `<button class="${cls}" data-act="selday" data-v="${ds}"><span class="dots">${dots}</span><span class="dn">${d}</span>${rs.length ? `<span class="dm">${Math.max(1, Math.round(sumSec(rs) / 60))}</span>` : ''}</button>`;
+  }
+  const mrs = recsWhere(ST.who, r => r.d.startsWith(ST.ym));
+  let dl = [...new Set(mrs.map(r => r.d))].sort(); if (ST.desc) dl.reverse();
+  const dlist = dl.map(ds => {
+    const rs = recsOf(ST.who, ds), dt = parseD(ds);
+    const pp = ST.who === 'all' ? `<div class="pp">${PEOPLE.map(p => { const s = sumSec(rs.filter(r => r.who === p.id)); return s ? `<span style="background:${p.color}">${p.rb} ${fmtDur(s)}</span>` : ''; }).join('')}</div>` : '';
+    return `<button class="di" data-act="selday" data-v="${ds}" data-top="1">
+      <span class="dc" style="background:${whoColor()}"><b>${dt.getDate()}</b><small>${wdRb(dt.getDay())}{曜日|ようび}</small></span>
+      <span class="dv"><b>${fmtDur(sumSec(rs))}</b><small>${fmtHen(sumHen(rs), true)}</small>${pp}</span></button>`;
+  }).join('');
+  return `
+  <section class="card">
+    <div class="nav"><button data-act="ymnav" data-v="-1">‹</button><b>${ymRb(ST.ym)}</b><button data-act="ymnav" data-v="1">›</button></div>
+    <div class="cal">${cal}</div>
+    <p class="note">{数字|すうじ}の{下|した}は{唱題|しょうだい}した{分|ふん}。{点|てん}の{色|いろ}=だれが{唱題|しょうだい}したか</p>
+  </section>
+  ${dayDetail(ST.sel)}
+  <section class="card">
+    <div class="tot"><span>${ymRb(ST.ym)} {合計|ごうけい}</span><span class="tv">${fmtDur(sumSec(mrs))}<small>${fmtHen(sumHen(mrs))}</small></span></div>
+  </section>
+  <section class="card dlist">
+    <div class="cttl">{日々|ひび}の{唱題|しょうだい}{実績|じっせき}<small><button class="sorter" data-act="sort">${ST.desc ? '↓ {新|あたら}しい{順|じゅん}' : '↑ {古|ふる}い{順|じゅん}'}</button></small></div>
+    ${dlist || '<div class="empty">この{月|つき}の{記録|きろく}はまだありません</div>'}
+  </section>`;
+}
+function dayDetail(ds) {
+  const rs = recsOf(ST.who, ds);
+  const lanes = ST.who === 'all' ? PEOPLE : [P(ST.who)];
+  const tl = lanes.map(p => {
+    const blocks = rs.filter(r => r.who === p.id).map(r => {
+      const [h, mi] = r.s.split(':').map(Number);
+      const left = (h * 60 + mi) / 1440 * 100, w = Math.max(r.sec / 60 / 1440 * 100, .7);
+      return `<i style="left:${left.toFixed(2)}%;width:${Math.min(w, 100 - left).toFixed(2)}%;background:${p.color}"></i>`;
+    }).join('');
+    return `<div class="lane">${ST.who === 'all' ? `<span class="ln">${p.rb}</span>` : ''}<div class="bar">${blocks}</div></div>`;
+  }).join('');
+  const list = rs.map(r => `<div class="rec">
+      <span class="rt">${dispT(r.s)}〜${endT(r)}</span>
+      <span class="rw" style="color:${P(r.who).color}">${P(r.who).rb}</span>
+      ${r.m ? '<span class="tag">{手入力|てにゅうりょく}</span>' : ''}
+      <span class="rv">${fmtDur(r.sec)}<small>${fmtHen(hen(r.sec), true)}</small></span>
+      <button class="ed" data-act="editrec" data-v="${r.id}" aria-label="なおす">✎</button></div>
+      ${r.memo ? `<div class="rmemo">📝 ${esc(r.memo)}</div>` : ''}`).join('');
+  return `<section class="card" id="daydetail">
+    <div class="cttl">🕒 ${dateRb(ds)} のタイムライン<small>${rs.length ? `${fmtDur(sumSec(rs))}・${fmtHen(sumHen(rs), true)}` : ''}</small></div>
+    <div class="tl">${tl}<div class="tlax ${ST.who === 'all' ? 'ind' : ''}"><span>0{時|じ}</span><span>6{時|じ}</span><span>12{時|じ}</span><span>18{時|じ}</span><span>24{時|じ}</span></div></div>
+    <div class="recs">${list || '<div class="empty" style="padding:14px">この{日|ひ}の{記録|きろく}はありません</div>'}</div>
+    <button class="addbtn" data-act="addrec" data-v="${ds}">＋ {手入力|てにゅうりょく}で{追加|ついか}</button>
+  </section>`;
+}
+function monthChart(y) {
+  const lanes = ST.who === 'all' ? PEOPLE : [P(ST.who)];
+  const data = Array.from({ length: 12 }, (_, i) => { const ym = `${y}-${pad(i + 1)}`; return lanes.map(p => sumSec(RECS.filter(r => r.who === p.id && r.d.startsWith(ym))) / 3600); });
+  const tot = data.map(a => a.reduce((x, v) => x + v, 0));
+  const mx = Math.max(0, ...tot);
+  const top = mx <= 0 ? 1 : mx <= 1 ? 1 : mx <= 4 ? 4 : Math.ceil(mx / 4) * 4;
+  const W = 340, H = 200, L0 = 30, R0 = 4, T0 = 18, B0 = 20, cw = (W - L0 - R0) / 12, bw = cw * .66, ch = H - T0 - B0;
+  const nf = v => (Math.round(v * 100) / 100).toString();
+  let s = `<svg viewBox="0 0 ${W} ${H}" class="mchart">`;
+  for (let i = 0; i <= 4; i++) { const v = top * i / 4, yy = T0 + ch - ch * i / 4; s += `<line x1="${L0}" x2="${W - R0}" y1="${yy}" y2="${yy}" class="gl"/><text x="${L0 - 4}" y="${yy + 3}" class="ax" text-anchor="end">${nf(v)}</text>`; }
+  data.forEach((a, i) => {
+    let acc = 0; const x = L0 + cw * i + (cw - bw) / 2;
+    a.forEach((v, j) => { if (v <= 0) return; const h = ch * v / top, yy = T0 + ch - ch * (acc + v) / top; s += `<rect x="${x.toFixed(1)}" y="${yy.toFixed(1)}" width="${bw.toFixed(1)}" height="${Math.max(h, 1).toFixed(1)}" fill="${lanes[j].color}" rx="2"/>`; acc += v; });
+    if (tot[i] > 0) s += `<text x="${(x + bw / 2).toFixed(1)}" y="${(T0 + ch - ch * tot[i] / top - 4).toFixed(1)}" class="bv" text-anchor="middle">${tot[i] < 10 ? tot[i].toFixed(1) : Math.round(tot[i])}</text>`;
+    s += `<text x="${(x + bw / 2).toFixed(1)}" y="${H - 5}" class="ax" text-anchor="middle">${i + 1}</text>`;
+  });
+  return s + '</svg>';
+}
+function vMonth() {
+  const y = ST.y, yrs = recsWhere(ST.who, r => r.d.startsWith(String(y)));
+  const cur = today().slice(0, 7);
+  const rows = Array.from({ length: 12 }, (_, i) => `${y}-${pad(i + 1)}`).filter(ym => ym <= cur || recsWhere(ST.who, r => r.d.startsWith(ym)).length).map(ym => {
+    const rs = recsWhere(ST.who, r => r.d.startsWith(ym));
+    return `<button class="mrow" data-act="gomonth" data-v="${ym}"><span>${ymRb(ym)} {合計|ごうけい}</span><span class="tv">${fmtDur(sumSec(rs))}<small>${fmtHen(sumHen(rs))}</small></span></button>`;
+  }).reverse().join('');
+  const leg = ST.who === 'all' ? `<div class="legend">${PEOPLE.map(p => `<i style="background:${p.color}"></i>${p.rb}`).join('&nbsp;')}</div>` : '';
+  return `<section class="card">
+    <div class="nav"><button data-act="ynav" data-v="-1">‹</button><b>${y}{年|ねん}</b><button data-act="ynav" data-v="1">›</button></div>
+    ${leg}${monthChart(y)}
+    <p class="note" style="margin-top:2px">たて={時間|じかん}・よこ={月|がつ}</p>
+  </section>
+  <section class="card"><div class="tot"><span>${y}{年|ねん} {合計|ごうけい}</span><span class="tv">${fmtDur(sumSec(yrs))}<small>${fmtHen(sumHen(yrs))}</small></span></div></section>
+  <section class="card" style="padding-top:6px">${rows || '<div class="empty">{記録|きろく}がありません</div>'}</section>`;
+}
+function vYear() {
+  const y = ST.y, td = today(), yrs = recsWhere(ST.who, r => r.d.startsWith(String(y)));
+  const daysDone = new Set(yrs.map(r => r.d)).size;
+  let blocks = '';
+  for (let m = 1; m <= 12; m++) {
+    const off = new Date(y, m - 1, 1).getDay(), days = new Date(y, m, 0).getDate();
+    let c = WD.map(w => `<span class="w">${w}</span>`).join('');
+    for (let i = 0; i < off; i++) c += '<i class="e"></i>';
+    for (let d = 1; d <= days; d++) {
+      const ds = `${y}-${pad(m)}-${pad(d)}`, mins = sumSec(recsOf(ST.who, ds)) / 60;
+      const lv = mins <= 0 ? 0 : mins < 5 ? 1 : mins < 15 ? 2 : mins < 30 ? 3 : 4;
+      c += `<i class="l${lv}${ds === td ? ' td' : ''}${ds > td ? ' fu' : ''}" data-act="yday" data-v="${ds}"></i>`;
+    }
+    const ms = sumSec(recsWhere(ST.who, r => r.d.startsWith(`${y}-${pad(m)}`)));
+    blocks += `<div><div class="ymh"><b>${m}{月|がつ}</b><small>${ms ? fmtDur(ms) : ''}</small></div><div class="yg">${c}</div></div>`;
+  }
+  return `<section class="card" style="--hc:${whoColor()}">
+    <div class="nav"><button data-act="ynav" data-v="-1">‹</button><b>${y}{年|ねん}</b><button data-act="ynav" data-v="1">›</button></div>
+    <div class="legend lg">0<i style="background:#e8edf2"></i><i class="l1" style="background:var(--hc)"></i><i class="l2" style="background:var(--hc)"></i><i class="l3" style="background:var(--hc)"></i><i style="background:var(--hc)"></i>30{分|ぷん}〜</div>
+    <div class="ygrid">${blocks}</div>
+    <p class="note">{色|いろ}がこいほど{長|なが}く{唱題|しょうだい}した{日|ひ}。タップでその{日|ひ}へ</p>
+  </section>
+  <section class="card"><div class="tot"><span>${y}{年|ねん} {合計|ごうけい}<br><small style="color:var(--sub)">{唱題|しょうだい}した{日|ひ} ${daysRb(daysDone)}</small></span><span class="tv">${fmtDur(sumSec(yrs))}<small>${fmtHen(sumHen(yrs))}</small></span></div></section>`;
+}
+function vRange() {
+  let { from, to } = ST; if (from > to) [from, to] = [to, from];
+  const rs = recsWhere(ST.who, r => r.d >= from && r.d <= to);
+  const span = Math.round((parseD(to) - parseD(from)) / 864e5) + 1, done = new Set(rs.map(r => r.d)).size;
+  const tot = sumSec(rs);
+  const brk = ST.who === 'all' ? `<div class="brk">${PEOPLE.map(p => { const pr = rs.filter(r => r.who === p.id), s = sumSec(pr); return `<div class="br"><span style="width:44px">${p.rb}</span><span class="bb"><i style="width:${tot ? (s / tot * 100).toFixed(1) : 0}%;background:${p.color}"></i></span><span class="bvv">${fmtDur(s)}・${fmtHen(sumHen(pr))}</span></div>`; }).join('')}</div>` : '';
+  const fd = d => { const dt = parseD(d); return `${dt.getFullYear()}{年|ねん}${dateRb(d)}`; };
+  return `<section class="card">
+    <div class="field"><span>いつから</span><input type="date" data-chg="from" value="${ST.from}"></div>
+    <div class="field"><span>いつまで</span><input type="date" data-chg="to" value="${ST.to}"></div>
+    <div class="quick"><button data-act="quick" data-v="tm">{今月|こんげつ}</button><button data-act="quick" data-v="lm">{先月|せんげつ}</button><button data-act="quick" data-v="ty">{今年|ことし}</button><button data-act="quick" data-v="all">ぜんぶ</button></div>
+  </section>
+  <section class="card">
+    <div class="note" style="margin-top:0">${fd(from)}から ${fd(to)}までの{題目|だいもく} {合計|ごうけい}</div>
+    <div class="big2">${fmtDur(tot)}<small>${fmtHen(sumHen(rs))}</small></div>
+    ${brk}
+    <p class="note">{唱題|しょうだい}した{日|ひ}:${daysRb(done)} / ${daysRb(span)}${done ? `・1{日|にち}あたり {平均|へいきん} ${fmtDur(tot / done)}` : ''}</p>
+  </section>`;
+}
+
+/* ---------- 御祈念項目 ---------- */
+const STATUS = { praying: '{祈念中|きねんちゅう}', yes: '{叶|かな}った', no: '{叶|かな}わなかった' };
+function visiblePrayers() { return prayers().filter(p => p.owner === L.me || (PR.fam && p.vis === 'family')); }
+function dueTxt(p) {
+  if (!p.due) return '';
+  const diff = Math.round((parseD(p.due) - parseD(today())) / 864e5);
+  const ds = `${parseD(p.due).getFullYear()}{年|ねん}${dateRb(p.due)}`;
+  if (p.status !== 'praying') return `📅 いつまでに:${ds}`;
+  if (diff > 0) return `📅 ${ds}まで(あと${daysRb(diff)})`;
+  if (diff === 0) return `📅 ${ds}まで(きょう!)`;
+  return `<span class="over">📅 ${ds}まで({期日|きじつ}を${daysRb(-diff)}すぎています)</span>`;
+}
+function vPray() {
+  const all = visiblePrayers();
+  const cnt = k => all.filter(p => p.status === k).length;
+  let list = all.filter(p => p.status === PR.tab);
+  if (PR.tab === 'praying') list.sort((a, b) => (a.due || '9999').localeCompare(b.due || '9999') || (b.created || 0) - (a.created || 0));
+  else list.sort((a, b) => (b.doneAt || '').localeCompare(a.doneAt || ''));
+  const cards = list.map(p => {
+    const o = P(p.owner), mine = p.owner === L.me;
+    const res = p.status !== 'praying' ? `<div class="res ${p.status}">${p.status === 'yes' ? '🎉 ' : ''}${STATUS[p.status]}${p.doneAt ? `(${dateRb(p.doneAt)})` : ''}${p.result ? `<br>${esc(p.result)}` : ''}</div>` : '';
+    const acts = mine ? (p.status === 'praying'
+      ? `<div class="pact"><button class="y" data-act="pstat" data-id="${p.id}" data-v="yes">🎉 {叶|かな}った</button><button class="n" data-act="pstat" data-id="${p.id}" data-v="no">{叶|かな}わなかった</button><button class="e" data-act="pedit" data-v="${p.id}">✎</button></div>`
+      : `<div class="pact"><button class="n" data-act="pstat" data-id="${p.id}" data-v="praying">{祈念中|きねんちゅう}にもどす</button><button class="e" data-act="pedit" data-v="${p.id}">✎</button></div>`) : '';
+    return `<div class="pcard" style="--c:${o.color}">
+      <div class="ph"><span class="av" style="background:${o.color}">${o.emoji}</span>${o.rb}${mine ? '' : 'の{御祈念|ごきねん}'}<span class="vis">${p.vis === 'family' ? '👪 {家族|かぞく}で{見|み}る' : '🔒 {自分|じぶん}だけ'}</span></div>
+      <h4>${esc(p.title)}</h4>
+      ${p.body ? `<div class="pb">${esc(p.body)}</div>` : ''}
+      ${p.due ? `<div class="due">${dueTxt(p)}</div>` : ''}
+      ${res}${acts}</div>`;
+  }).join('');
+  const tabs = ['praying', 'yes', 'no'];
+  return `<div class="subtabs" style="grid-template-columns:repeat(3,1fr)">${tabs.map(k => `<button class="${PR.tab === k ? 'on' : ''}" data-act="ptab" data-v="${k}">${STATUS[k]}<span class="pcount">${cnt(k)}</span></button>`).join('')}</div>
+  <button class="tg" data-act="pfam"><span class="sw ${PR.fam ? 'on' : ''}"></span>{家族|かぞく}の{御祈念|ごきねん}も{見|み}る</button>
+  ${cards || `<div class="empty"><span class="ei">${PR.tab === 'praying' ? '🙏' : PR.tab === 'yes' ? '🌸' : '🍃'}</span>${PR.tab === 'praying' ? '{御祈念|ごきねん}{項目|こうもく}がありません' : 'まだありません'}</div>`}
+  <button class="bigbtn" data-act="pnew">＋ {御祈念|ごきねん}{項目|こうもく}を{新規|しんき}{作成|さくせい}する</button>`;
+}
+
+/* ---------- せってい ---------- */
+function vSet() {
+  const pend = PENDING.length;
+  return `<section class="card">
+    <div class="srow"><div class="sl">このスマホを{使|つか}う{人|ひと}</div>
+      <div class="wseg">${PEOPLE.map(p => `<button style="--c:${p.color}" class="${L.me === p.id ? 'on' : ''}" data-act="setme" data-v="${p.id}"><span class="av" style="background:${p.color}">${p.emoji}</span>${p.rb}</button>`).join('')}</div>
+      <div class="sd">{保存|ほぞん}した{唱題|しょうだい}は、ここで{選|えら}んだ{人|ひと}の{記録|きろく}になります。</div></div>
+    <div class="srow"><div class="sl">{漢字|かんじ}のふりがな</div>
+      <div class="wseg plain"><button class="${furiOn() ? 'on' : ''}" data-act="furi" data-v="1">つける</button><button class="${!furiOn() ? 'on' : ''}" data-act="furi" data-v="0">つけない</button></div>
+      <div class="sd">{藍世|あいせい}ちゃんのスマホは、はじめから「つける」になります。</div></div>
+    <div class="srow"><div class="sl">1{日|にち}の{目標|もくひょう}</div>
+      <input class="numin" type="number" inputmode="numeric" min="0" max="600" data-chg="goal" value="${L.goal}"> {分|ふん}
+      <div class="sd">ストップウォッチの{輪|わ}が、{目標|もくひょう}に{向|む}かって{増|ふ}えていきます。</div></div>
+    <div class="srow"><div class="sl">タイマー{終了|しゅうりょう}のおと</div>
+      <div class="wseg plain"><button class="${L.sound ? 'on' : ''}" data-act="snd" data-v="1">🔔 あり</button><button class="${!L.sound ? 'on' : ''}" data-act="snd" data-v="0">🔕 なし</button></div></div>
+  </section>
+  <section class="card">
+    <div class="cttl">☁️ {保存|ほぞん}のじょうたい</div>
+    <div>${MODE === 'cloud' ? '{家族|かぞく}3{人|にん}で{共有中|きょうゆうちゅう}です' : MODE === 'local' ? 'この{端末|たんまつ}だけに{保存|ほぞん}しています' : '{接続中|せつぞくちゅう}…'}</div>
+    ${MODE_NOTE ? `<div class="sd" style="color:var(--warn)">${esc(MODE_NOTE)}</div>` : ''}
+    ${pend ? `<div class="sd">まだ{送|おく}っていない{記録|きろく}:${pend}{件|けん}(つながったら{自動|じどう}で{送|おく}ります)</div>` : ''}
+  </section>
+  <section class="card">
+    <div class="cttl">💾 バックアップ</div>
+    <button class="btn2" data-act="bkdl">📥 ダウンロード</button>
+    <button class="btn2" data-act="bkup">♻️ {復元|ふくげん}</button>
+    <input type="file" id="bkfile" accept=".json,application/json" hidden>
+    <div class="sd">{家族|かぞく}の{唱題|しょうだい}{記録|きろく}と{御祈念|ごきねん}{項目|こうもく}をファイルに{保存|ほぞん}できます。</div>
+  </section>
+  <p class="note" style="text-align:center">お{題目帳|だいもくちょう}・1{分|ぷん} = 30{遍|ぺん}で{計算|けいさん}</p>`;
+}
+
+/* ============================================================
+   モーダル
+   ============================================================ */
+const $modal = document.getElementById('modal');
+function openModal(html) { $modal.innerHTML = T(`<div class="mbg" data-act="mclose"></div><div class="mbox">${html}</div>`); }
+function closeModal() { $modal.innerHTML = ''; }
+function whoModal(force) {
+  openModal(`<h3>このスマホを{使|つか}うのは だれ?</h3>
+    <div class="whos">${PEOPLE.map(p => `<button style="--c:${p.color}" class="${L.me === p.id ? 'on' : ''}" data-act="setme" data-v="${p.id}" data-close="1"><span class="av" style="background:${p.color}">${p.emoji}</span>${p.rb}</button>`).join('')}</div>
+    <p class="note">あとから「せってい」でも{変|か}えられます。</p>
+    ${L.me ? '<div class="mbtns"><button data-act="mclose">とじる</button></div>' : ''}`);
+}
+let FWHO = null;
+function recModal(id, d) {
+  const r = id ? RECS.find(x => x.id === id) : null;
+  if (id && !r) return;
+  const now = new Date(Date.now() - 15 * 60e3);
+  const v = r || { who: L.me || 'papa', d: d || today(), s: `${pad(now.getHours())}:${pad(now.getMinutes())}`, sec: 600, memo: '' };
+  FWHO = v.who;
+  openModal(`<h3>${r ? '{記録|きろく}を{直|なお}す' : '{手入力|てにゅうりょく}で{追加|ついか}'}</h3>
+    <label class="fl">だれ</label>
+    <div class="wseg" id="fwho">${PEOPLE.map(p => `<button style="--c:${p.color}" class="${v.who === p.id ? 'on' : ''}" data-act="fwho" data-v="${p.id}"><span class="av" style="background:${p.color}">${p.emoji}</span>${p.rb}</button>`).join('')}</div>
+    <label class="fl">{日|ひ}にち</label><input type="date" id="fD" value="${v.d}">
+    <label class="fl">{始|はじ}めた{時刻|じこく}</label><input type="time" id="fS" value="${v.s}">
+    <label class="fl">{唱題|しょうだい}した{時間|じかん}</label>
+    <div class="durin"><input type="number" id="fM" inputmode="numeric" min="0" max="900" value="${Math.floor(v.sec / 60)}">{分|ふん}<input type="number" id="fSec" inputmode="numeric" min="0" max="59" value="${v.sec % 60}">{秒|びょう}</div>
+    <div class="calc" id="fHen"></div>
+    <label class="fl">メモ(なくてもOK)</label><input type="text" id="fMemo" maxlength="100" value="${esc(v.memo || '')}">
+    <div class="mbtns">${r ? `<button class="del" data-act="recdel" data-v="${r.id}">{削除|さくじょ}</button>` : ''}<button data-act="mclose">やめる</button><button class="pri" data-act="recsave" data-v="${r ? r.id : ''}">{保存|ほぞん}</button></div>`);
+  calcHen();
+}
+function fSec() { return Math.max(0, (parseInt(document.getElementById('fM').value) || 0) * 60 + Math.min(59, parseInt(document.getElementById('fSec').value) || 0)); }
+function calcHen() { const el = document.getElementById('fHen'); if (el) el.innerHTML = T(`= ${fmtHen(hen(fSec()), true)}`); }
+function recSave(id) {
+  const sec = fSec(), d = document.getElementById('fD').value, s = document.getElementById('fS').value;
+  if (!d || !/^\d{4}-\d\d-\d\d$/.test(d)) return toast('{日|ひ}にちを{入|い}れてね');
+  if (!s) return toast('{時刻|じこく}を{入|い}れてね');
+  if (sec < 1) return toast('{時間|じかん}を{入|い}れてね');
+  const old = id ? RECS.find(x => x.id === id) : null;
+  const rec = { who: FWHO, d, s: s.slice(0, 5), sec, memo: document.getElementById('fMemo').value.trim(), m: old ? !!old.m : true, at: old ? (old.at || Date.now()) : Date.now(), ed: Date.now() };
+  const rid = id || newId();
+  if (old && recDoc(old) !== recDoc(rec)) op({ t: 'del', doc: recDoc(old), path: `recs.${rid}` }, true);
+  op({ t: 'merge', doc: recDoc(rec), data: { recs: { [rid]: rec } } }, true);
+  closeModal(); ST.sel = d; ST.ym = d.slice(0, 7); render();
+  toast(old ? '{直|なお}しました' : '{追加|ついか}しました');
+}
+function prayModal(id) {
+  const p = id ? prayers().find(x => x.id === id) : null;
+  const v = p || { title: '', body: '', due: '', vis: 'family', status: 'praying', result: '' };
+  openModal(`<h3>${p ? '{御祈念|ごきねん}{項目|こうもく}を{直|なお}す' : '{御祈念|ごきねん}{項目|こうもく}をつくる'}</h3>
+    <label class="fl">ねがい</label><input type="text" id="pT" maxlength="80" value="${esc(v.title)}" placeholder="${plain('{例|れい}:{家族|かぞく}みんなが{健康|けんこう}でいられますように')}">
+    <label class="fl">くわしく({自由|じゆう}に{書|か}いてね)</label><textarea id="pB" maxlength="1000">${esc(v.body || '')}</textarea>
+    <label class="fl">いつまでに</label>
+    <div class="durin"><input type="date" id="pD" value="${v.due || ''}" style="width:auto!important;flex:1"><button class="btn2" style="margin:0" data-act="pdclear">きめない</button></div>
+    <label class="fl">だれに{見|み}せる?</label>
+    <div class="wseg plain" id="pV"><button class="${v.vis === 'family' ? 'on' : ''}" data-act="pvis" data-v="family">👪 {家族|かぞく}で{見|み}る</button><button class="${v.vis !== 'family' ? 'on' : ''}" data-act="pvis" data-v="me">🔒 {自分|じぶん}だけ</button></div>
+    ${p ? `<label class="fl">けっか</label>
+    <div class="wseg plain" id="pS">${['praying', 'yes', 'no'].map(k => `<button class="${v.status === k ? 'on' : ''}" data-act="pst" data-v="${k}">${STATUS[k]}</button>`).join('')}</div>
+    <label class="fl">ふりかえりメモ(なくてもOK)</label><textarea id="pR" maxlength="1000" style="min-height:60px">${esc(v.result || '')}</textarea>` : ''}
+    <div class="mbtns">${p ? `<button class="del" data-act="pdel" data-v="${p.id}">{削除|さくじょ}</button>` : ''}<button data-act="mclose">やめる</button><button class="pri" data-act="psave" data-v="${p ? p.id : ''}">{保存|ほぞん}</button></div>`);
+}
+function segVal(id) { const b = document.querySelector(`#${id} button.on`); return b ? b.dataset.v : null; }
+function prayerSave(id) {
+  const title = document.getElementById('pT').value.trim();
+  if (!title) return toast('ねがいを{書|か}いてね');
+  const old = id ? prayers().find(x => x.id === id) : null;
+  const status = old ? segVal('pS') : 'praying';
+  const item = {
+    owner: old ? old.owner : L.me, title, body: document.getElementById('pB').value.trim(),
+    due: document.getElementById('pD').value || '', vis: segVal('pV') || 'family', status,
+    result: old ? document.getElementById('pR').value.trim() : '',
+    doneAt: status === 'praying' ? '' : ((old && old.status === status && old.doneAt) || today()),
+    created: old ? old.created || Date.now() : Date.now(), upd: Date.now()
+  };
+  op({ t: 'merge', doc: 'prayers', data: { items: { [id || newId()]: item } } }, true);
+  closeModal(); PR.tab = status; render();
+  if (status === 'yes' && (!old || old.status !== 'yes')) celebrate(); else toast('{保存|ほぞん}しました');
+}
+function celebrate() {
+  const c = document.createElement('div'); c.className = 'confetti';
+  const em = ['🎉', '🌸', '✨', '🎊', '💐'];
+  for (let i = 0; i < 28; i++) { const s = document.createElement('span'); s.textContent = em[i % em.length]; s.style.left = Math.random() * 100 + 'vw'; s.style.animationDelay = Math.random() * .6 + 's'; c.appendChild(s); }
+  document.body.appendChild(c); setTimeout(() => c.remove(), 2600);
+  toast('おめでとう! 🎉');
+}
+
+/* ---------- トースト ---------- */
+let toastT = null;
+function toast(msg) { const t = document.getElementById('toast'); t.innerHTML = T(msg); t.classList.add('show'); clearTimeout(toastT); toastT = setTimeout(() => t.classList.remove('show'), 2600); }
+
+/* ============================================================
+   操作
+   ============================================================ */
+const ACT = {
+  tab: el => { CUR = el.dataset.v; window.scrollTo(0, 0); render(); },
+  who: () => whoModal(),
+  setme: el => {
+    const was = L.me; L.me = el.dataset.v; saveL();
+    if (was && was !== L.me && TS.running) { tStop(); }
+    if (ST.who === was || !ST.who) ST.who = L.me;
+    closeModal();
+    renderHeader(); render();
+  },
+  mclose: () => closeModal(),
+  startstop: () => TS.running ? tStop() : tStart(),
+  reset: () => tReset(),
+  save: () => tSave(),
+  mode: el => {
+    if (TS.mode === el.dataset.v) return;
+    if (elapsed() > 0) return toast('リセットか{保存|ほぞん}をしてから{切|き}りかえてね');
+    TS.mode = el.dataset.v; saveTS(); render();
+  },
+  target: el => {
+    if (elapsed() > 0) return toast('リセットか{保存|ほぞん}をしてから{変|か}えてね');
+    let v = el.dataset.v;
+    if (v === 'custom') { const a = prompt('なん分にしますか?(1〜300)', TS.target); if (a === null) return; v = parseInt(a); if (!(v >= 1 && v <= 300)) return toast('1〜300で{入|い}れてね'); }
+    TS.target = +v; saveTS(); render();
+  },
+  sound: () => { L.sound = !L.sound; saveL(); ensureAudio(); render(); },
+  famgo: el => { ST.who = el.dataset.v; ST.sub = 'day'; ST.sel = today(); ST.ym = today().slice(0, 7); CUR = 'stats'; window.scrollTo(0, 0); render(); },
+  swho: el => { ST.who = el.dataset.v; render(); },
+  ssub: el => { ST.sub = el.dataset.v; render(); },
+  ymnav: el => { const [y, m] = ST.ym.split('-').map(Number); const d = new Date(y, m - 1 + (+el.dataset.v), 1); ST.ym = ymd(d).slice(0, 7); render(); },
+  ynav: el => { ST.y += +el.dataset.v; render(); },
+  selday: el => {
+    ST.sel = el.dataset.v; ST.ym = ST.sel.slice(0, 7); render();
+    const dd = document.getElementById('daydetail'); if (dd) dd.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  },
+  yday: el => { ST.sel = el.dataset.v; ST.ym = ST.sel.slice(0, 7); ST.sub = 'day'; render(); const dd = document.getElementById('daydetail'); if (dd) dd.scrollIntoView({ block: 'start' }); },
+  gomonth: el => { ST.ym = el.dataset.v; ST.sub = 'day'; window.scrollTo(0, 0); render(); },
+  sort: () => { ST.desc = !ST.desc; render(); },
+  quick: el => {
+    const td = today(), v = el.dataset.v;
+    if (v === 'tm') { ST.from = td.slice(0, 8) + '01'; ST.to = td; }
+    if (v === 'lm') { const d = new Date(); d.setDate(1); d.setMonth(d.getMonth() - 1); ST.from = ymd(d); const e = new Date(d.getFullYear(), d.getMonth() + 1, 0); ST.to = ymd(e); }
+    if (v === 'ty') { ST.from = td.slice(0, 4) + '-01-01'; ST.to = td; }
+    if (v === 'all') { ST.from = RECS.length ? RECS[0].d : td; ST.to = td; }
+    render();
+  },
+  addrec: el => recModal(null, el.dataset.v),
+  editrec: el => recModal(el.dataset.v),
+  fwho: el => { FWHO = el.dataset.v; document.querySelectorAll('#fwho button').forEach(b => b.classList.toggle('on', b === el)); },
+  recsave: el => recSave(el.dataset.v),
+  recdel: el => {
+    const r = RECS.find(x => x.id === el.dataset.v); if (!r) return;
+    if (!confirm('この記録を削除しますか?')) return;
+    op({ t: 'del', doc: recDoc(r), path: `recs.${r.id}` }, true); closeModal(); render(); toast('{削除|さくじょ}しました');
+  },
+  ptab: el => { PR.tab = el.dataset.v; render(); },
+  pfam: () => { PR.fam = !PR.fam; render(); },
+  pnew: () => { if (!L.me) return whoModal(); prayModal(null); },
+  pedit: el => prayModal(el.dataset.v),
+  pvis: el => document.querySelectorAll('#pV button').forEach(b => b.classList.toggle('on', b === el)),
+  pst: el => document.querySelectorAll('#pS button').forEach(b => b.classList.toggle('on', b === el)),
+  pdclear: () => { document.getElementById('pD').value = ''; },
+  psave: el => prayerSave(el.dataset.v),
+  pdel: el => {
+    if (!confirm('この御祈念項目を削除しますか?')) return;
+    op({ t: 'del', doc: 'prayers', path: `items.${el.dataset.v}` }, true); closeModal(); render(); toast('{削除|さくじょ}しました');
+  },
+  pstat: el => {
+    const p = prayers().find(x => x.id === el.dataset.id); if (!p) return;
+    const v = el.dataset.v;
+    const { id: pid, ...rest } = p;
+    op({ t: 'merge', doc: 'prayers', data: { items: { [pid]: { ...rest, status: v, doneAt: v === 'praying' ? '' : today(), upd: Date.now() } } } }, true);
+    render();
+    if (v === 'yes') celebrate(); else toast(v === 'no' ? '{記録|きろく}しました' : '{祈念中|きねんちゅう}にもどしました');
+  },
+  furi: el => { L.furi = el.dataset.v === '1'; saveL(); renderHeader(); render(); },
+  snd: el => { L.sound = el.dataset.v === '1'; saveL(); render(); },
+  bkdl: () => {
+    const blob = new Blob([JSON.stringify({ app: 'odaimoku-cho', ver: 1, at: new Date().toISOString(), docs: DOCS }, null, 1)], { type: 'application/json' });
+    const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = `odaimoku-backup-${today().replace(/-/g, '')}.json`; a.click();
+    setTimeout(() => URL.revokeObjectURL(a.href), 2000);
+  },
+  bkup: () => document.getElementById('bkfile').click(),
+};
+const CHG = {
+  from: el => { if (el.value) { ST.from = el.value; el.blur(); render(); } },
+  to: el => { if (el.value) { ST.to = el.value; el.blur(); render(); } },
+  goal: el => { const v = parseInt(el.value); if (v >= 0 && v <= 600) { L.goal = v; saveL(); } },
+};
+document.addEventListener('click', e => {
+  const el = e.target.closest('[data-act]'); if (!el) return;
+  const f = ACT[el.dataset.act]; if (f) { e.preventDefault(); f(el, e); }
+});
+document.addEventListener('change', e => {
+  const el = e.target.closest('[data-chg]'); if (el && CHG[el.dataset.chg]) CHG[el.dataset.chg](el);
+  if (e.target.id === 'bkfile' && e.target.files[0]) {
+    const rd = new FileReader();
+    rd.onload = () => {
+      try {
+        const j = JSON.parse(rd.result); if (!j || j.app !== 'odaimoku-cho' || !j.docs) throw 0;
+        if (!confirm('バックアップの記録を取りこみますか?(いまの記録は消えず、足し合わせます)')) return;
+        for (const [id, data] of Object.entries(j.docs)) if (id.startsWith('rec_') || id === 'prayers') op({ t: 'merge', doc: id, data }, true);
+        render(); toast('{復元|ふくげん}しました');
+      } catch (er) { toast('ファイルが{読|よ}めませんでした'); }
+    };
+    rd.readAsText(e.target.files[0]); e.target.value = '';
+  }
+});
+document.addEventListener('input', e => { if (e.target.id === 'fM' || e.target.id === 'fSec') calcHen(); });
+document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible') { if (TS.running) wake(true); render(); } });
+
+/* ---------- 起動 ---------- */
+rebuild(); renderHeader(); render();
+if (!L.me) whoModal();
+initFirebase();
+if ('serviceWorker' in navigator && location.protocol.startsWith('http')) navigator.serviceWorker.register('sw.js').catch(() => {});
+window.__od = { get DOCS() { return DOCS; }, get RECS() { return RECS; }, TS, L, get MODE() { return MODE; } };
+</script>
+</body>
+</html>

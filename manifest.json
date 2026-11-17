@@ -1,0 +1,16 @@
+{
+  "name": "お題目帳",
+  "short_name": "お題目帳",
+  "description": "家族3人で共有する唱題記録(1分=30遍)",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#f2f5f8",
+  "theme_color": "#145b86",
+  "icons": [
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
