@@ -304,6 +304,15 @@ ruby{ruby-position:over}
 .vwin img{display:block;width:100%;height:auto}
 .vwin.big img{width:220%;max-width:none}
 
+/* rate */
+.raterow{display:flex;align-items:center;gap:8px;margin:6px 0;flex-wrap:wrap}
+.raterow .rn{display:flex;align-items:center;gap:4px;width:74px;font-weight:700;font-size:14px}
+.raterow .rn .av{width:24px;height:24px;font-size:14px}
+.raterow .wseg{flex:1;align-items:center;flex-wrap:nowrap}
+.raterow .wseg button{padding:5px 10px;font-size:13px}
+.rin{width:82px!important;padding:5px 8px!important;font-size:14px!important}
+.rin.on{border-color:var(--pri);background:var(--soft);font-weight:700}
+
 /* settings */
 .srow{padding:12px 0;border-bottom:1px solid var(--line)}
 .srow:last-child{border-bottom:0}
@@ -354,7 +363,7 @@ ruby{ruby-position:over}
 <script type="module">
 /* ============================================================
    お題目帳(家族3人で共有する唱題記録アプリ)
-   1分 = 30遍 で計算
+   1分あたりの遍数は人ごとに設定(普通60・早め67・自分で入力)。過去の記録も今の設定で計算
    ============================================================ */
 const COL = 'daimoku-family';
 const FB_VER = '10.12.2';
@@ -366,8 +375,9 @@ const CFG = {
   messagingSenderId: "851503769517",
   appId: "1:851503769517:web:71f1616be8b5d3ea982324"
 };
-const HEN_PER_MIN = 30;
-const hen = sec => Math.floor(Math.max(0, sec) * HEN_PER_MIN / 60);
+const RATE_DEFAULT = 60, RATE_PRESETS = [['normal', '{普通|ふつう}', 60], ['fast', '{早|はや}め', 67]];
+const rateOf = who => { const r = DOCS.settings && DOCS.settings.rate && DOCS.settings.rate[who]; return (r >= 1 && r <= 300) ? +r : RATE_DEFAULT; };
+const hen = (sec, who) => Math.floor(Math.max(0, sec) * rateOf(who || L.me) / 60);
 
 const PEOPLE = [
   { id: 'papa',  name: 'パパ', rb: 'パパ',            color: '#2b7bd6', emoji: '👨' },
@@ -450,7 +460,7 @@ function rebuild() {
 const recsOf = (who, d) => (BYDAY[d] || []).filter(r => who === 'all' || r.who === who);
 const recsWhere = (who, f) => RECS.filter(r => (who === 'all' || r.who === who) && f(r));
 const sumSec = a => a.reduce((x, r) => x + (r.sec || 0), 0);
-const sumHen = a => a.reduce((x, r) => x + hen(r.sec || 0), 0);
+const sumHen = a => a.reduce((x, r) => x + hen(r.sec || 0, r.who), 0);
 const prayers = () => Object.entries((DOCS.prayers && DOCS.prayers.items) || {}).filter(([, v]) => v).map(([id, v]) => ({ ...v, id }));
 const recDoc = r => `rec_${r.who}_${r.d.slice(0, 7).replace('-', '')}`;
 const saveCache = () => lsSet(K('cache'), DOCS);
@@ -601,7 +611,7 @@ function tSave() {
   const rec = { who: L.me, d: ymd(st), s: `${pad(st.getHours())}:${pad(st.getMinutes())}`, sec, memo: '', m: false, at: Date.now() };
   tClear();
   op({ t: 'merge', doc: recDoc(rec), data: { recs: { [newId()]: rec } } });
-  toast(`{保存|ほぞん}しました! ${fmtDur(sec)}・${fmtHen(hen(sec), true)}`);
+  toast(`{保存|ほぞん}しました! ${fmtDur(sec)}・${fmtHen(hen(sec, rec.who), true)}`);
 }
 
 const ARC_R = 110, ARC_C = 2 * Math.PI * ARC_R, ARC_L = ARC_C * 0.75;
@@ -738,7 +748,7 @@ function vHome() {
     </div>
     <button class="addbtn" data-act="addrec" data-v="${td}">＋ {手入力|てにゅうりょく}で{記録|きろく}を{追加|ついか}</button>
   </section>` : ''}
-  <p class="note" style="text-align:center">1{分|ぷん} = 30{遍|ぺん}で{計算|けいさん}しています</p>`;
+  <p class="note" style="text-align:center">${L.me ? `1{分|ぷん} = ${rateOf(L.me)}{遍|${ben(rateOf(L.me))}}で{計算|けいさん}しています(せっていで{変|か}えられます)` : ''}</p>`;
 }
 
 /* ---------- 題目実績 ---------- */
@@ -805,7 +815,7 @@ function dayDetail(ds) {
       <span class="rt">${dispT(r.s)}〜${endT(r)}</span>
       <span class="rw" style="color:${P(r.who).color}">${P(r.who).rb}</span>
       ${r.m ? '<span class="tag">{手入力|てにゅうりょく}</span>' : ''}
-      <span class="rv">${fmtDur(r.sec)}<small>${fmtHen(hen(r.sec), true)}</small></span>
+      <span class="rv">${fmtDur(r.sec)}<small>${fmtHen(hen(r.sec, r.who), true)}</small></span>
       <button class="ed" data-act="editrec" data-v="${r.id}" aria-label="なおす">✎</button></div>
       ${r.memo ? `<div class="rmemo">📝 ${esc(r.memo)}</div>` : ''}`).join('');
   return `<section class="card" id="daydetail">
@@ -1543,6 +1553,11 @@ async function copyNow(text) {
   catch (e) { const t = document.getElementById('cpTx'); if (t) { t.select(); try { document.execCommand('copy'); toast('コピーしました'); return true; } catch (e2) {} } toast('{長押|ながお}しして{全部|ぜんぶ}{選|えら}んでコピーしてね'); return false; }
 }
 
+function setRate(who, v) {
+  if (!(v >= 1 && v <= 300)) return;
+  op({ t: 'merge', doc: 'settings', data: { rate: { [who]: v } } }, true);
+  render(); toast(`${P(who).rb}:1{分|ぷん} = ${v}{遍|${ben(v)}}にしました`);
+}
 /* ---------- せってい ---------- */
 function vSet() {
   const pend = PENDING.length;
@@ -1553,6 +1568,12 @@ function vSet() {
     <div class="srow"><div class="sl">{漢字|かんじ}のふりがな</div>
       <div class="wseg plain"><button class="${furiOn() ? 'on' : ''}" data-act="furi" data-v="1">つける</button><button class="${!furiOn() ? 'on' : ''}" data-act="furi" data-v="0">つけない</button></div>
       <div class="sd">{藍世|あいせい}のスマホは、はじめから「つける」になります。</div></div>
+    <div class="srow"><div class="sl">1{分|ぷん}あたりの{遍数|へんすう}</div>
+      ${PEOPLE.map(p => { const r = rateOf(p.id), pre = RATE_PRESETS.find(x => x[2] === r);
+        return `<div class="raterow"><span class="rn"><span class="av" style="background:${p.color}">${p.emoji}</span>${p.rb}</span>
+        <div class="wseg plain">${RATE_PRESETS.map(([k, l, v]) => `<button class="${pre && pre[0] === k ? 'on' : ''}" data-act="rate" data-who="${p.id}" data-v="${v}">${l} ${v}</button>`).join('')}
+        <input class="numin rin ${pre ? '' : 'on'}" type="number" inputmode="numeric" min="1" max="300" data-chg="rate" data-who="${p.id}" value="${pre ? '' : r}" placeholder="${plain('{自分|じぶん}で')}"></div></div>`; }).join('')}
+      <div class="sd">{普通|ふつう}=1{分|ぷん}60{遍|ぺん}、{早|はや}め=1{分|ぷん}67{遍|へん}。{数字|すうじ}を{入|い}れると{自分|じぶん}の{遍数|へんすう}にできます。{変|か}えると、これまでの{記録|きろく}の{遍数|へんすう}もすべて{新|あたら}しい{設定|せってい}で{計算|けいさん}しなおします(時間は変わりません)。{家族|かぞく}みんなのスマホに{共有|きょうゆう}されます。</div></div>
     <div class="srow"><div class="sl">1{日|にち}の{目標|もくひょう}</div>
       <input class="numin" type="number" inputmode="numeric" min="0" max="600" data-chg="goal" value="${L.goal}"> {分|ふん}
       <div class="sd">ストップウォッチの{輪|わ}が、{目標|もくひょう}に{向|む}かって{増|ふ}えていきます。</div></div>
@@ -1572,7 +1593,7 @@ function vSet() {
     <input type="file" id="bkfile" accept=".json,application/json" hidden>
     <div class="sd">{家族|かぞく}の{唱題|しょうだい}{記録|きろく}・{御祈念|ごきねん}{項目|こうもく}・{心|こころ}に{刻|きざ}む{言葉|ことば}(メモ)をファイルに{保存|ほぞん}できます。{写真|しゃしん}はふくまれません(クラウドに{残|のこ}っています)。</div>
   </section>
-  <p class="note" style="text-align:center">お{題目帳|だいもくちょう}・1{分|ぷん} = 30{遍|ぺん}で{計算|けいさん}</p>`;
+  <p class="note" style="text-align:center">お{題目帳|だいもくちょう}</p>`;
 }
 
 /* ============================================================
@@ -1607,7 +1628,7 @@ function recModal(id, d) {
   calcHen();
 }
 function fSec() { return Math.max(0, (parseInt(document.getElementById('fM').value) || 0) * 60 + Math.min(59, parseInt(document.getElementById('fSec').value) || 0)); }
-function calcHen() { const el = document.getElementById('fHen'); if (el) el.innerHTML = T(`= ${fmtHen(hen(fSec()), true)}`); }
+function calcHen() { const el = document.getElementById('fHen'); if (el) el.innerHTML = T(`= ${fmtHen(hen(fSec(), FWHO), true)}`); }
 function recSave(id) {
   const sec = fSec(), d = document.getElementById('fD').value, s = document.getElementById('fS').value;
   if (!d || !/^\d{4}-\d\d-\d\d$/.test(d)) return toast('{日|ひ}にちを{入|い}れてね');
@@ -1744,6 +1765,7 @@ const ACT = {
     if (!confirm('この記録を削除しますか?')) return;
     op({ t: 'del', doc: recDoc(r), path: `recs.${r.id}` }, true); closeModal(); render(); toast('{削除|さくじょ}しました');
   },
+  rate: el => setRate(el.dataset.who, +el.dataset.v),
   wnew: () => wordModal(null),
   wopen: el => wordView(el.dataset.v),
   wedit: el => wordModal(el.dataset.v),
@@ -1821,6 +1843,7 @@ const ACT = {
 const CHG = {
   from: el => { if (el.value) { ST.from = el.value; el.blur(); render(); } },
   to: el => { if (el.value) { ST.to = el.value; el.blur(); render(); } },
+  rate: el => { const v = parseInt(el.value); if (v >= 1 && v <= 300) { el.blur(); setRate(el.dataset.who, v); } else if (el.value) toast('1〜300で{入|い}れてね'); },
   goal: el => { const v = parseInt(el.value); if (v >= 0 && v <= 600) { L.goal = v; saveL(); } },
 };
 document.addEventListener('click', e => {
@@ -1836,7 +1859,7 @@ document.addEventListener('change', e => {
       try {
         const j = JSON.parse(rd.result); if (!j || j.app !== 'odaimoku-cho' || !j.docs) throw 0;
         if (!confirm('バックアップの記録を取りこみますか?(いまの記録は消えず、足し合わせます)')) return;
-        for (const [id, data] of Object.entries(j.docs)) if (id.startsWith('rec_') || id === 'prayers' || id === 'words') op({ t: 'merge', doc: id, data }, true);
+        for (const [id, data] of Object.entries(j.docs)) if (id.startsWith('rec_') || id === 'prayers' || id === 'words' || id === 'settings') op({ t: 'merge', doc: id, data }, true);
         render(); toast('{復元|ふくげん}しました');
       } catch (er) { toast('ファイルが{読|よ}めませんでした'); }
     };
