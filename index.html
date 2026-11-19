@@ -202,6 +202,67 @@ ruby{ruby-position:over}
 .empty{text-align:center;color:var(--sub);padding:34px 10px 10px;font-size:14px}
 .empty .ei{font-size:52px;display:block;margin-bottom:4px}
 
+/* prayers v2 */
+.ptop .ptoday{display:flex;justify-content:space-between;align-items:center;font-weight:700}
+.ptop .ptoday b{font-size:22px;color:var(--pri2)}
+.pcat .cttl{flex-wrap:wrap;margin-bottom:4px}
+.pcat .cttl small{width:100%;margin-left:0;font-size:11.5px}
+.cico{font-size:20px}
+.prow{display:flex;align-items:flex-start;gap:4px;padding:10px 0;border-top:1px solid var(--line)}
+.ck{display:flex;flex-direction:column;align-items:center;gap:1px;width:42px;flex:none}
+.ck .bx{width:30px;height:30px;border-radius:8px;border:2px solid #b9c6d2;display:grid;place-items:center;font-weight:800;font-size:17px;color:#fff;background:#fff}
+.ck .cl{font-size:10.5px;color:var(--sub);line-height:1.3}
+.ck.k1.on .bx{background:var(--pri);border-color:var(--pri)}
+.ck.k2.on .bx{background:var(--ok);border-color:var(--ok)}
+.ck[disabled]{opacity:.7;cursor:default}
+.prow .pt{flex:1;text-align:left;min-width:0;padding:3px 0 0 4px}
+.prow .pt b{display:block;font-size:15px;line-height:1.45;word-break:break-word}
+.prow .pbd{font-size:12.5px;color:#4d5d6c;white-space:pre-wrap;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.prow .pm{display:block;font-size:11.5px;color:var(--sub);margin-top:2px}
+.prow .pm .sep{font-style:normal;opacity:.5}
+.prow .pm .over{color:var(--warn);font-weight:700}
+.prow.ach .pt b{color:#1f7a45}
+.prow.ng{opacity:.55}
+.star{width:34px;height:34px;font-size:22px;color:#c8d1da;flex:none}
+.star.on{color:#f4b400}
+.star[disabled]{cursor:default}
+.pempty{font-size:13px;color:var(--sub);padding:8px 0 2px;border-top:1px solid var(--line)}
+.padd{margin-top:6px;font-size:13.5px;font-weight:700;color:var(--pri2);padding:6px 2px}
+.catsel{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.catsel button{display:flex;align-items:center;gap:6px;padding:10px;border-radius:12px;border:1.5px solid var(--line);font-weight:700;text-align:left}
+.catsel button.on{border-color:var(--pri);background:var(--soft)}
+.pgo{display:flex;align-items:center;gap:8px;width:100%;text-align:left;font-weight:700}
+.pgo b{margin-left:auto;font-size:20px;color:var(--pri2)}
+.pgo .arr{color:var(--sub);font-size:22px}
+
+/* voice / import */
+.micbig{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;margin-top:12px;padding:12px;border-radius:14px;background:linear-gradient(135deg,#1aa0d8,#1478b8);color:#fff;font-weight:700;font-size:16px;box-shadow:0 3px 10px rgba(20,120,184,.3)}
+.micbig span{font-size:22px}
+.vmic{display:block;margin:6px auto 4px;width:92px;height:92px;border-radius:50%;background:#eef2f5;font-size:42px}
+.vmic.on{background:#e8604f;box-shadow:0 0 0 0 rgba(232,96,79,.5);animation:ring 1.4s infinite}
+@keyframes ring{0%{box-shadow:0 0 0 0 rgba(232,96,79,.5)}100%{box-shadow:0 0 0 22px rgba(232,96,79,0)}}
+.vst{text-align:center;font-size:13px;color:var(--sub);min-height:20px;margin-bottom:8px}
+.vex{font-size:12px;color:var(--sub);margin-top:8px;line-height:1.7;background:#f6f8fa;border-radius:10px;padding:8px 10px}
+.heard{font-size:13px;color:#4d5d6c;background:#f6f8fa;border-radius:10px;padding:8px 10px;margin-bottom:6px;word-break:break-word}
+.cmp{border:1.5px solid var(--line);border-radius:12px;padding:10px 12px;font-weight:700}
+.cmp small{display:block;font-weight:400;color:var(--sub);font-size:11.5px}
+.cmp.to{border-color:var(--pri);background:var(--soft)}
+.cmp.to.del{border-color:var(--warn);background:#fdecea;color:var(--warn)}
+.cmparr{text-align:center;color:var(--sub);font-size:18px;margin:4px 0}
+.vpick{display:flex;flex-direction:column;gap:6px;margin-top:6px}
+.vpick button{text-align:left;padding:10px 12px;border-radius:12px;border:1.5px solid var(--line);font-weight:700}
+.fmic{display:flex!important;align-items:center;justify-content:space-between}
+.mini{font-size:12px;font-weight:700;padding:4px 10px;border-radius:99px;background:var(--soft);color:var(--pri2)}
+.mini.on{background:#e8604f;color:#fff;animation:pulse 1.2s infinite}
+.ioline{display:flex;gap:8px;margin-top:10px}
+.ioline button{flex:1;padding:10px 6px;border-radius:12px;background:#fff;border:1.5px solid var(--line);font-size:13.5px;font-weight:700;color:#3d5366}
+.imprev{margin-top:12px;border-top:1px solid var(--line)}
+.imph{font-weight:700;font-size:14px;margin:10px 0 4px}
+.improw{display:flex;gap:8px;align-items:flex-start;padding:6px 0;font-size:14px}
+.improw input{width:20px;height:20px;margin-top:2px;flex:none}
+.improw small{display:block;font-size:11.5px;color:var(--sub)}
+.improw.dup{opacity:.55}
+
 /* settings */
 .srow{padding:12px 0;border-bottom:1px solid var(--line)}
 .srow:last-child{border-bottom:0}
@@ -352,16 +413,20 @@ const prayers = () => Object.entries((DOCS.prayers && DOCS.prayers.items) || {})
 const recDoc = r => `rec_${r.who}_${r.d.slice(0, 7).replace('-', '')}`;
 const saveCache = () => lsSet(K('cache'), DOCS);
 
+function deepMerge(t, src) {
+  const o = (t && typeof t === 'object' && !Array.isArray(t)) ? { ...t } : {};
+  for (const [k, v] of Object.entries(src)) o[k] = (v && typeof v === 'object' && !Array.isArray(v)) ? deepMerge(o[k], v) : v;
+  return o;
+}
 function applyLocal(o) {
-  if (o.t === 'merge') {
-    const cur = DOCS[o.doc] || (DOCS[o.doc] = {});
-    for (const [k, v] of Object.entries(o.data)) {
-      if (v && typeof v === 'object' && cur[k] && typeof cur[k] === 'object') cur[k] = { ...cur[k], ...v };
-      else cur[k] = v;
+  if (o.t === 'merge') { DOCS[o.doc] = deepMerge(DOCS[o.doc] || {}, o.data); return; }
+  if (o.t === 'del' && DOCS[o.doc]) {
+    const parts = o.path.split('.'), root = { ...DOCS[o.doc] }; let cur = root;
+    for (let i = 0; i < parts.length - 1; i++) {
+      if (!cur[parts[i]] || typeof cur[parts[i]] !== 'object') return;
+      cur[parts[i]] = { ...cur[parts[i]] }; cur = cur[parts[i]];
     }
-  } else if (o.t === 'del') {
-    const cur = DOCS[o.doc]; const [a, b] = o.path.split('.');
-    if (cur && cur[a]) { cur[a] = { ...cur[a] }; delete cur[a][b]; }
+    delete cur[parts[parts.length - 1]]; DOCS[o.doc] = root;
   }
 }
 function remote(o) {
@@ -409,6 +474,7 @@ async function initFirebase() {
       const wasCloud = MODE === 'cloud';
       MODE = 'cloud'; MODE_NOTE = fromCache ? 'オフライン中(つながったら送ります)' : '';
       if (!wasCloud) flush();
+      if (!fromCache) seedPrayers();
       renderHeader(); render();
     }, err => {
       clearTimeout(slow); console.warn(err);
@@ -536,7 +602,7 @@ setInterval(tick, 250);
    ============================================================ */
 let CUR = 'home';
 const ST = { who: null, sub: 'day', ym: today().slice(0, 7), sel: today(), y: new Date().getFullYear(), from: today().slice(0, 8) + '01', to: today(), desc: true };
-const PR = { tab: 'praying', fam: true };
+const PR = { fav: false, fam: true, done: true };
 const $main = document.getElementById('main');
 let needRender = false;
 
@@ -588,6 +654,7 @@ function vHome() {
   const ym = td.slice(0, 7), yy = td.slice(0, 4);
   const mm = mine.filter(r => r.d.startsWith(ym)), my = mine.filter(r => r.d.startsWith(yy));
   const stk = L.me ? streak(L.me) : 0;
+  const myP = L.me ? prayers().filter(p => p.owner === L.me && p.status === 'praying') : [];
   return `
   <section class="band">
     <div class="bt">{家族|かぞく}のお{題目|だいもく}・これまでの{合計|ごうけい}</div>
@@ -612,6 +679,7 @@ function vHome() {
       <button class="cbtn" data-act="save">{保存|ほぞん}</button>
     </div>
   </section>
+  ${myP.length ? `<button class="card pgo" data-act="tab" data-v="pray"><span>🙏 きょうの{御祈念|ごきねん}</span><b>${myP.filter(p => prayedOn(p, td)).length} / ${myP.length}</b><span class="arr">›</span></button>` : ''}
   ${L.me ? `<section class="card">
     <div class="cttl">${P(L.me).emoji} わたしの{記録|きろく}<small>${stk ? `🔥 ${stk}{日|にち}れんぞく` : ''}</small></div>
     <div class="mytot">
@@ -777,8 +845,18 @@ function vRange() {
   </section>`;
 }
 
-/* ---------- 御祈念項目 ---------- */
-const STATUS = { praying: '{祈念中|きねんちゅう}', yes: '{叶|かな}った', no: '{叶|かな}わなかった' };
+/* ---------- 御祈念項目(4分類・祈念チェック/達成チェック) ---------- */
+const STATUS = { praying: '{祈念中|きねんちゅう}', yes: '{達成|たっせい}', no: '{叶|かな}わなかった' };
+const CATS = [
+  { id: 'work',   icon: '💼', name: '{仕事|しごと}',           desc: () => '{売上|うりあげ}・{粗利|あらり}・{新規開拓|しんきかいたく}・{会社|かいしゃ}の{成長|せいちょう}' },
+  { id: 'self',   icon: '🌱', name: '{自分|じぶん}',           desc: () => '{人間性|にんげんせい}・{学習|がくしゅう}・{健康|けんこう}・{挑戦|ちょうせん}' },
+  { id: 'family', icon: '🏠', name: '{家族|かぞく}',           desc: () => L.me === 'papa' ? '{妻|つま}・{藍世|あいせい}・{家族|かぞく}の{幸|しあわ}せ' : '{家族|かぞく}の{幸|しあわ}せ' },
+  { id: 'others', icon: '🤝', name: '{周囲|しゅうい}の{人|ひと}', desc: () => '{社員|しゃいん}・{友人|ゆうじん}・{知人|ちじん}・{地域|ちいき}' },
+];
+const catOf = id => CATS.find(c => c.id === id) || { icon: '📂', name: '{未分類|みぶんるい}' };
+const dkey = d => 'd' + d.replace(/-/g, '');
+const prayedOn = (p, d) => !!(p.pd && p.pd[dkey(d)]);
+const prayedDays = p => Object.values(p.pd || {}).filter(Boolean).length;
 function visiblePrayers() { return prayers().filter(p => p.owner === L.me || (PR.fam && p.vis === 'family')); }
 function dueTxt(p) {
   if (!p.due) return '';
@@ -789,30 +867,388 @@ function dueTxt(p) {
   if (diff === 0) return `📅 ${ds}まで(きょう!)`;
   return `<span class="over">📅 ${ds}まで({期日|きじつ}を${daysRb(-diff)}すぎています)</span>`;
 }
+function prayRow(p) {
+  const o = P(p.owner), mine = p.owner === L.me;
+  const pr = prayedOn(p, today()), ach = p.status === 'yes', ng = p.status === 'no';
+  const box = (on, act, label, cls) => `<button class="ck ${cls} ${on ? 'on' : ''}" ${mine ? `data-act="${act}" data-v="${p.id}"` : 'disabled'}><span class="bx">${on ? '✓' : ''}</span><span class="cl">${label}</span></button>`;
+  const meta = [
+    !mine ? `<span style="color:${o.color};font-weight:700">${o.emoji}${o.rb}</span>` : '',
+    p.vis === 'family' ? '👪' : '🔒',
+    prayedDays(p) ? `🙏 ${daysRb(prayedDays(p))}` : '',
+    ach && p.doneAt ? `🎉 ${dateRb(p.doneAt)}{達成|たっせい}` : '',
+    ng ? '{叶|かな}わなかった' : '',
+    (!ach && !ng && p.due) ? dueTxt(p) : '',
+  ].filter(Boolean).join('<i class="sep">・</i>');
+  return `<div class="prow ${ach ? 'ach' : ''} ${ng ? 'ng' : ''}">
+    ${box(pr, 'pray1', '{祈念|きねん}', 'k1')}${box(ach, 'pach', '{達成|たっせい}', 'k2')}
+    <button class="pt" data-act="${mine ? 'pedit' : 'pview'}" data-v="${p.id}"><b>${esc(p.title)}</b>${p.body ? `<span class="pbd">${esc(p.body)}</span>` : ''}<span class="pm">${meta}</span></button>
+    <button class="star ${p.fav ? 'on' : ''}" ${mine ? `data-act="pfav" data-v="${p.id}"` : 'disabled'} aria-label="お気に入り">${p.fav ? '★' : '☆'}</button>
+  </div>`;
+}
 function vPray() {
-  const all = visiblePrayers();
-  const cnt = k => all.filter(p => p.status === k).length;
-  let list = all.filter(p => p.status === PR.tab);
-  if (PR.tab === 'praying') list.sort((a, b) => (a.due || '9999').localeCompare(b.due || '9999') || (b.created || 0) - (a.created || 0));
-  else list.sort((a, b) => (b.doneAt || '').localeCompare(a.doneAt || ''));
-  const cards = list.map(p => {
-    const o = P(p.owner), mine = p.owner === L.me;
-    const res = p.status !== 'praying' ? `<div class="res ${p.status}">${p.status === 'yes' ? '🎉 ' : ''}${STATUS[p.status]}${p.doneAt ? `(${dateRb(p.doneAt)})` : ''}${p.result ? `<br>${esc(p.result)}` : ''}</div>` : '';
-    const acts = mine ? (p.status === 'praying'
-      ? `<div class="pact"><button class="y" data-act="pstat" data-id="${p.id}" data-v="yes">🎉 {叶|かな}った</button><button class="n" data-act="pstat" data-id="${p.id}" data-v="no">{叶|かな}わなかった</button><button class="e" data-act="pedit" data-v="${p.id}">✎</button></div>`
-      : `<div class="pact"><button class="n" data-act="pstat" data-id="${p.id}" data-v="praying">{祈念中|きねんちゅう}にもどす</button><button class="e" data-act="pedit" data-v="${p.id}">✎</button></div>`) : '';
-    return `<div class="pcard" style="--c:${o.color}">
-      <div class="ph"><span class="av" style="background:${o.color}">${o.emoji}</span>${o.rb}${mine ? '' : 'の{御祈念|ごきねん}'}<span class="vis">${p.vis === 'family' ? '👪 {家族|かぞく}で{見|み}る' : '🔒 {自分|じぶん}だけ'}</span></div>
-      <h4>${esc(p.title)}</h4>
-      ${p.body ? `<div class="pb">${esc(p.body)}</div>` : ''}
-      ${p.due ? `<div class="due">${dueTxt(p)}</div>` : ''}
-      ${res}${acts}</div>`;
-  }).join('');
-  const tabs = ['praying', 'yes', 'no'];
-  return `<div class="subtabs" style="grid-template-columns:repeat(3,1fr)">${tabs.map(k => `<button class="${PR.tab === k ? 'on' : ''}" data-act="ptab" data-v="${k}">${STATUS[k]}<span class="pcount">${cnt(k)}</span></button>`).join('')}</div>
-  <button class="tg" data-act="pfam"><span class="sw ${PR.fam ? 'on' : ''}"></span>{家族|かぞく}の{御祈念|ごきねん}も{見|み}る</button>
-  ${cards || `<div class="empty"><span class="ei">${PR.tab === 'praying' ? '🙏' : PR.tab === 'yes' ? '🌸' : '🍃'}</span>${PR.tab === 'praying' ? '{御祈念|ごきねん}{項目|こうもく}がありません' : 'まだありません'}</div>`}
-  <button class="bigbtn" data-act="pnew">＋ {御祈念|ごきねん}{項目|こうもく}を{新規|しんき}{作成|さくせい}する</button>`;
+  const all = visiblePrayers(), td = today();
+  const mineActive = all.filter(p => p.owner === L.me && p.status === 'praying');
+  const doneToday = mineActive.filter(p => prayedOn(p, td)).length;
+  let list = all;
+  if (PR.fav) list = list.filter(p => p.fav);
+  if (!PR.done) list = list.filter(p => p.status === 'praying');
+  const rank = p => (p.owner === L.me ? 0 : 2) + (p.status === 'praying' ? 0 : 1);
+  const sortF = (a, b) => rank(a) - rank(b) || (a.due || '9999').localeCompare(b.due || '9999') || (a.created || 0) - (b.created || 0);
+  const sec = (c, items, uncat) => `<section class="card pcat">
+    <div class="cttl"><span class="cico">${c.icon}</span>${c.name}<span class="pcount">${items.length}</span>${c.desc ? `<small>${c.desc()}</small>` : ''}</div>
+    ${items.sort(sortF).map(prayRow).join('') || `<div class="pempty">${PR.fav ? '⭐の{項目|こうもく}はありません' : 'まだありません'}</div>`}
+    ${!uncat && !PR.fav ? `<button class="padd" data-act="pnew" data-v="${c.id}">＋ ${c.name}に{追加|ついか}</button>` : ''}
+  </section>`;
+  const ids = CATS.map(c => c.id), uncat = list.filter(p => !ids.includes(p.cat));
+  return `<section class="card ptop">
+    <div class="ptoday"><span>🙏 きょうの{祈念|きねん}</span><b>${doneToday} / ${mineActive.length}</b></div>
+    <button class="micbig" data-act="voice"><span>🎤</span>{話|はな}して{追加|ついか}・{変更|へんこう}</button>
+    <div class="seg" style="margin-top:10px"><button class="${!PR.fav ? 'on' : ''}" data-act="pfavf" data-v="0">すべて</button><button class="${PR.fav ? 'on' : ''}" data-act="pfavf" data-v="1">⭐ お{気|き}に{入|い}り</button></div>
+    <button class="tg" data-act="pfam"><span class="sw ${PR.fam ? 'on' : ''}"></span>{家族|かぞく}の{御祈念|ごきねん}も{見|み}る</button>
+    <button class="tg" data-act="pdone"><span class="sw ${PR.done ? 'on' : ''}"></span>{達成|たっせい}したものも{表示|ひょうじ}する</button>
+    <p class="note">「{祈念|きねん}」は その{日|ひ}に{祈念|きねん}したらチェック({毎日|まいにち}あたらしくなります)。「{達成|たっせい}」は{願|ねが}いが{叶|かな}ったらチェック。</p>
+  </section>
+  ${CATS.map(c => sec(c, list.filter(p => p.cat === c.id))).join('')}
+  ${uncat.length ? sec({ icon: '📂', name: '{未分類|みぶんるい}', desc: () => '✎で{分類|ぶんるい}を{選|えら}んでね' }, uncat, true) : ''}
+  <button class="bigbtn" data-act="pnew">＋ {御祈念|ごきねん}{項目|こうもく}を{新規|しんき}{作成|さくせい}する</button>
+  <div class="ioline"><button data-act="imp">📋 まとめて{取|と}り{込|こ}み</button><button data-act="exp">📤 {一覧|いちらん}をコピー</button></div>
+  <p class="note" style="text-align:center">Claudeで{整理|せいり}した{一覧|いちらん}の{取|と}り{込|こ}み・Claudeに{渡|わた}す{一覧|いちらん}のコピーができます</p>`;
+}
+const SEEDS = [{ id: 'seed-tamaki-gohonzon', owner: 'papa', cat: 'others', title: '玉置さんのお母さんの御本尊授与' }];
+function seedPrayers() {
+  if (L.me !== 'papa' || L.seeded1) return;
+  if (MODE !== 'cloud' && !LOCAL_ONLY) return;
+  const items = (DOCS.prayers && DOCS.prayers.items) || {};
+  for (const sd of SEEDS) {
+    if (items[sd.id] || prayers().some(p => p.title === sd.title)) continue;
+    const { id, ...rest } = sd;
+    op({ t: 'merge', doc: 'prayers', data: { items: { [id]: { ...rest, body: '', due: '', vis: 'family', status: 'praying', result: '', doneAt: '', fav: false, created: Date.now(), upd: Date.now() } } } }, true);
+  }
+  L.seeded1 = true; saveL();
+}
+
+
+/* ============================================================
+   🎤 音声で追加・変更(B)/ まとめて取り込み・書き出し(C)
+   ============================================================ */
+const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+let REC = null;
+function stopRec(abort) { try { if (REC) abort ? REC.abort() : REC.stop(); } catch (e) {} }
+function listen(onDone, onLive) {
+  if (!SR) { toast('このブラウザでは{音声入力|おんせいにゅうりょく}が{使|つか}えません。キーボードのマイクを{使|つか}ってね'); return null; }
+  stopRec(true);
+  const r = new SR(); REC = r;
+  r.lang = 'ja-JP'; r.interimResults = true; r.continuous = false; r.maxAlternatives = 1;
+  let last = '', ended = false;
+  r.onresult = e => { let t = ''; for (let i = 0; i < e.results.length; i++) t += e.results[i][0].transcript; last = t; onLive && onLive(t); };
+  r.onerror = e => {
+    if (e.error === 'not-allowed' || e.error === 'service-not-allowed') toast('マイクの{使用|しよう}を{許可|きょか}してね');
+    else if (e.error === 'no-speech') toast('{聞|き}き{取|と}れませんでした。もう{一度|いちど}どうぞ');
+    else if (e.error === 'network') toast('インターネットにつながっていないと{使|つか}えません');
+  };
+  r.onend = () => { if (ended) return; ended = true; if (REC === r) REC = null; onDone(last.trim()); };
+  try { r.start(); } catch (e) { toast('マイクを{開|ひら}けませんでした'); return null; }
+  return r;
+}
+
+/* --- ことばの整え --- */
+const FILLER = '(?:えーっと|えーと|えっと|ええと|えー+|え〜+|あのー+|あの〜|あのう|あの|あー+|うーん|うーむ|まあ|まぁ|なんか|そのー+|ほら)';
+function cleanSpeech(s) {
+  s = String(s || '').normalize('NFKC').replace(/\s+/g, ' ').trim();
+  const F = new RegExp('(^|[\\s、。])' + FILLER + '(?=[\\s、。]|$)', 'g');
+  let prev; do { prev = s; s = s.replace(F, '$1'); } while (s !== prev);
+  s = s.replace(new RegExp('^' + FILLER + '[、\\s]*'), '');
+  s = s.replace(/(?<=[^\x00-\x7F])\s+|\s+(?=[^\x00-\x7F])/g, '');
+  s = s.replace(/^(?:御祈念|ご祈念|ごきねん|祈念)(?:項目)?(?:に|で|は|の)?/, '');
+  s = s.replace(/(?:って感じ|みたいな感じ|みたいな|かなあ|かなー|かな)$/, '');
+  s = s.replace(/^[、。\s]+|[、。\s]+$/g, '');
+  return s;
+}
+const KNUM = '〇一二三四五六七八九十百千';
+function kanjiNum(str) {
+  const d = { '〇': 0, '一': 1, '二': 2, '三': 3, '四': 4, '五': 5, '六': 6, '七': 7, '八': 8, '九': 9 }, u = { '十': 10, '百': 100, '千': 1000 };
+  let total = 0, cur = 0;
+  for (const ch of str) { if (ch in d) cur = cur * 10 + d[ch]; else { total += (cur || 1) * u[ch]; cur = 0; } }
+  return total + cur;
+}
+const norm = s => String(s || '').normalize('NFKC').replace(new RegExp('[' + KNUM + ']+', 'g'), m => String(kanjiNum(m))).replace(/[\s、。・,.!！?？「」『』()（）]/g, '');
+function dice(a, b) {
+  if (!a || !b) return 0; if (a === b) return 1;
+  const bg = x => { const m = new Map(); for (let i = 0; i < x.length - 1; i++) { const k = x.slice(i, i + 2); m.set(k, (m.get(k) || 0) + 1); } return m; };
+  const A = bg(a), B = bg(b); let inter = 0;
+  for (const [k, v] of A) inter += Math.min(v, B.get(k) || 0);
+  const n = Math.max(1, a.length - 1) + Math.max(1, b.length - 1);
+  return 2 * inter / n;
+}
+
+/* --- 分類の提案 --- */
+const CAT_WORDS = { work: ['仕事', 'しごと'], self: ['自分', 'じぶん'], family: ['家族', 'かぞく'], others: ['周囲の人', '周りの人', 'まわりの人', '周囲', 'しゅうい'] };
+const catFromWord = w => { w = norm(w); for (const [k, arr] of Object.entries(CAT_WORDS)) if (arr.some(x => norm(x) === w)) return k; return null; };
+const CAT_KW = {
+  work: [['売上', 2], ['粗利', 2], ['利益', 2], ['新規', 2], ['開拓', 2], ['契約', 2], ['受注', 2], ['会社', 2], ['仕事', 2], ['営業', 2], ['商談', 2], ['取引', 2], ['顧客', 2], ['お客', 1], ['事業', 2], ['職場', 2], ['昇進', 2], ['給料', 1], ['ボーナス', 1], ['プロジェクト', 1], ['社', 1], ['店', 1]],
+  family: [['藍世', 3], ['あいせ', 3], ['妻', 3], ['夫', 3], ['パパ', 3], ['ママ', 3], ['娘', 3], ['息子', 3], ['家族', 3], ['夫婦', 3], ['家庭', 2], ['我が家', 2], ['わが家', 2], ['子ども', 2], ['子供', 2], ['両親', 2], ['実家', 2], ['お父さん', 1], ['お母さん', 1]],
+  others: [['さん', 3], ['ちゃん', 2], ['くん', 2], ['社員', 3], ['部下', 3], ['同僚', 3], ['友人', 3], ['友達', 3], ['友だち', 3], ['知人', 3], ['地域', 3], ['近所', 3], ['先輩', 2], ['後輩', 2], ['御本尊', 2], ['ご本尊', 2], ['入会', 2], ['みんな', 1]],
+  self: [['健康', 2], ['勉強', 2], ['学習', 2], ['資格', 2], ['診断士', 3], ['試験', 2], ['ダイエット', 2], ['体重', 2], ['運動', 2], ['腕立て', 2], ['筋トレ', 2], ['ゴルフ', 2], ['ジョギング', 2], ['ランニング', 2], ['挑戦', 2], ['人間性', 2], ['早起き', 2], ['読書', 2], ['自分', 2], ['習慣', 1], ['成長', 1]],
+};
+function suggestCat(t) {
+  const sc = {}; for (const [k, list] of Object.entries(CAT_KW)) sc[k] = list.reduce((a, [w, n]) => a + (t.includes(w) ? n : 0), 0);
+  const order = ['family', 'others', 'work', 'self'];
+  let best = null; for (const k of order) if (sc[k] > 0 && (!best || sc[k] > sc[best])) best = k;
+  return best;
+}
+
+/* --- 話した内容の読み取り --- */
+const trimTarget = a => a.replace(/^(?:さっきの|あの|その|ご祈念の|御祈念の|祈念の)/, '').replace(/(?:っていうやつ|っていうの|というの|っていう項目|という項目|の項目|のやつ|っていう|という|の祈念|のご祈念|の御祈念)$/, '').replace(/^[「『]|[」』]$/g, '').trim();
+function parseCmd(t) {
+  let m;
+  if ((m = t.match(/^(.+?)を(?:削除|消し|けし|消去)/))) return { type: 'del', A: trimTarget(m[1]) };
+  if ((m = t.match(/^(.+?)(?:を|が|は)?(?:達成(?:済み)?に(?:して|する|変え)|叶ったことにして|叶いました|かないました|叶った$|かなった$|達成しました|達成できました|達成した$)/))) return { type: 'yes', A: trimTarget(m[1]) };
+  if ((m = t.match(/^(.+?)を(.+?)に(?:変更|へんこう|変え|かえ|替え|直|なお|修正|書き換え|書きかえ|訂正|移動|移し|うつし)/))) {
+    const A = trimTarget(m[1]), B = m[2].replace(/^[「『]|[」』]$/g, '');
+    const c = catFromWord(B.replace(/(?:の分類|分類)$/, ''));
+    return c ? { type: 'cat', A, cat: c } : { type: 'text', A, B };
+  }
+  if ((m = t.match(/^(.+?)(?:じゃなくて|ではなくて|じゃなく|ではなく)(.+?)(?:に(?:して|変更|変え|かえ|直|修正).*)?$/))) return { type: 'text', A: trimTarget(m[1]), B: m[2] };
+  return null;
+}
+function parseAdd(t) {
+  let cat = null, m;
+  if ((m = t.match(/^(仕事|自分|家族|周囲の人|周りの人|まわりの人)(?:に|の|で|へ|は)(.+)$/))) { cat = catFromWord(m[1]); t = m[2]; }
+  if ((m = t.match(/^(.+?)を(仕事|自分|家族|周囲の人|周りの人|まわりの人)(?:に|へ)(?:追加|登録|入れ)/))) { cat = catFromWord(m[2]); t = m[1]; }
+  t = t.replace(/(?:を|って)?(?:追加|登録|入れ|いれ)(?:し)?(?:て|る|たい)?(?:ください|ほしい|おいて|お願い)?(?:ね|よ)?$/, '');
+  t = t.replace(/^[、。\s]+|[、。\s]+$/g, '');
+  return { title: t, cat };
+}
+function findTargets(A) {
+  const mine = prayers().filter(p => p.owner === L.me);
+  const nA = norm(A); if (!nA) return [];
+  const hit = mine.filter(p => { const nt = norm(p.title); return nt.includes(nA) || (nt.length >= 3 && nA.includes(nt)); });
+  if (hit.length) return hit;
+  const chunks = nA.split(/[のがをにはでとへもや]/).filter(x => x.length >= 2);
+  if (chunks.length) { const h2 = mine.filter(p => { const nt = norm(p.title); return chunks.every(c => nt.includes(c)); }); if (h2.length) return h2; }
+  const sc = mine.map(p => [p, dice(nA, norm(p.title))]).filter(x => x[1] >= 0.4).sort((a, b) => b[1] - a[1]);
+  if (sc.length >= 2 && sc[0][1] - sc[1][1] > 0.15) return [sc[0][0]];
+  return sc.slice(0, 5).map(x => x[0]);
+}
+function toKanji(n) {
+  const d = '〇一二三四五六七八九'; if (n === 0) return '〇'; let s = '';
+  for (const [u, k] of [[1000, '千'], [100, '百'], [10, '十']]) { const q = Math.floor(n / u); if (q) { s += (q > 1 ? d[q] : '') + k; n %= u; } }
+  return s + (n ? d[n] : '');
+}
+const escRe = s => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+function applyChange(title, A, B) {
+  const m = B.match(new RegExp('^(\\d+|[' + KNUM + ']+)([^\\d' + KNUM + ']{1,4})$'));
+  if (m) {
+    const re = new RegExp('(\\d+|[' + KNUM + ']+)' + escRe(m[2])), tm = title.match(re);
+    if (tm) {
+      const n = /^\d+$/.test(m[1]) ? +m[1] : kanjiNum(m[1]);
+      const num = /^\d+$/.test(tm[1]) ? String(n) : toKanji(n);
+      return title.replace(re, num + m[2]);
+    }
+  }
+  if (A && title.includes(A)) return title.replace(A, B);
+  const nT = norm(title), nA = norm(A);
+  if (nA && nT.includes(nA)) return nT.replace(nA, B);
+  if (B.length >= Math.max(4, A.length * 0.6)) return B;
+  return null;
+}
+
+/* --- 🎤 の画面 --- */
+let VC = null; // { cmd, heard, cands, pick }
+function voiceModal() {
+  if (!L.me) return whoModal();
+  openModal(`<h3>🎤 {話|はな}して{追加|ついか}・{変更|へんこう}</h3>
+    <button class="vmic" id="vMic" data-act="vmic">🎤</button>
+    <div class="vst" id="vSt"></div>
+    <textarea id="vTx" placeholder="${plain('ここに{聞|き}き{取|と}った{文|ぶん}が{出|で}ます。{手|て}で{直|なお}してもOK')}"></textarea>
+    <div class="vex">{例|れい})<br>・{家族|かぞく}みんなが{健康|けんこう}でいられますように<br>・{仕事|しごと}に{新規獲得四社|しんきかくとくよんしゃ}を{追加|ついか}して<br>・{腕立|うでた}て{伏|ふ}せ10{回|かい}を20{回|かい}に{変|か}えて<br>・{腕立|うでた}て{伏|ふ}せを{達成|たっせい}にして / 〇〇を{削除|さくじょ}して</div>
+    <div class="mbtns"><button data-act="mclose">やめる</button><button class="pri" data-act="vgo">{決定|けってい}</button></div>`);
+  vStart(false);
+}
+function setV(on) {
+  const b = document.getElementById('vMic'), st = document.getElementById('vSt'); if (!b) return;
+  b.classList.toggle('on', on);
+  st.innerHTML = T(on ? '{聞|き}いています…{話|はな}しおわったら{少|すこ}し{待|ま}ってね' : (document.getElementById('vTx').value ? '🎤を{押|お}すと、つづけて{話|はな}せます' : '🎤を{押|お}して{話|はな}してね'));
+}
+function vStart(append) {
+  const tx = document.getElementById('vTx'); if (!tx) return;
+  const base = append ? tx.value.trim() : '';
+  const join = t => (base && t ? base + ' ' : base) + t;
+  const r = listen(t => { setV(false); if (t && document.getElementById('vTx')) tx.value = join(t); setV(false); }, t => { tx.value = join(t); });
+  setV(!!r);
+}
+function vGo() {
+  stopRec(true);
+  const raw = (document.getElementById('vTx') || {}).value || '';
+  const t = cleanSpeech(raw);
+  if (!t) return toast('まだ{何|なに}も{聞|き}き{取|と}れていません');
+  const cmd = parseCmd(t);
+  if (cmd) {
+    const cands = findTargets(cmd.A);
+    if (cands.length || cmd.type === 'text' || cmd.type === 'cat') {
+      VC = { cmd, heard: raw, cands: cands.length ? cands : prayers().filter(p => p.owner === L.me), pick: cands.length === 1 ? cands[0].id : null, none: !cands.length };
+      return vChangeModal();
+    }
+    if (cmd.type === 'del') return toast('どの{項目|こうもく}か{分|わ}かりませんでした');
+  }
+  const a = parseAdd(t);
+  const sug = a.cat || suggestCat(a.title);
+  prayModal(null, sug, { title: a.title, heard: raw, suggested: !a.cat && !!sug });
+}
+function vChangeModal() {
+  const { cmd, heard, cands, pick, none } = VC;
+  const p = pick ? prayers().find(x => x.id === pick) : null;
+  let body = '';
+  if (!p) {
+    body = `<div class="note" style="margin-top:0">${none ? 'どの{項目|こうもく}か{分|わ}からなかったので、{選|えら}んでね' : '{当|あ}てはまる{項目|こうもく}がいくつかあります。どれですか?'}</div>
+      <div class="vpick">${cands.map(c => `<button data-act="vpick" data-v="${c.id}">${catOf(c.cat).icon} ${esc(c.title)}</button>`).join('') || '<div class="pempty">{項目|こうもく}がありません</div>'}</div>`;
+  } else {
+    const before = `<div class="cmp"><small>いまの{内容|ないよう}</small><div>${catOf(p.cat).icon} ${esc(p.title)}</div></div>`;
+    if (cmd.type === 'text') {
+      const nt = applyChange(p.title, cmd.A, cmd.B);
+      body = before + `<div class="cmparr">↓</div><label class="fl" style="margin-top:0">なおしたあと</label><input type="text" id="vNew" maxlength="120" value="${esc(nt ?? p.title)}">
+        ${nt === null ? '<div class="note" style="color:var(--warn)">うまく{直|なお}せなかったので、ここで{直|なお}してね</div>' : ''}`;
+    } else if (cmd.type === 'cat') {
+      body = before + `<div class="cmparr">↓</div><div class="cmp to">{分類|ぶんるい}を ${catOf(cmd.cat).icon} ${catOf(cmd.cat).name} にする</div>`;
+    } else if (cmd.type === 'yes') {
+      body = before + `<div class="cmparr">↓</div><div class="cmp to">🎉 {達成|たっせい}にする</div>`;
+    } else {
+      body = before + `<div class="cmparr">↓</div><div class="cmp to del">🗑 この{項目|こうもく}を{削除|さくじょ}する</div>`;
+    }
+  }
+  openModal(`<h3>🎤 {御祈念|ごきねん}を{直|なお}す</h3>
+    <div class="heard">🎤「${esc(heard)}」</div>
+    ${body}
+    <div class="mbtns"><button data-act="mclose">やめる</button>${p ? `<button class="pri" data-act="vapply">${cmd.type === 'del' ? '{削除|さくじょ}する' : 'この{内容|ないよう}で{直|なお}す'}</button>` : ''}</div>`);
+}
+function vApply() {
+  const { cmd, pick } = VC; const p = prayers().find(x => x.id === pick); if (!p) return closeModal();
+  if (cmd.type === 'text') {
+    const v = document.getElementById('vNew').value.trim(); if (!v) return toast('{文|ぶん}を{入|い}れてね');
+    op({ t: 'merge', doc: 'prayers', data: { items: { [p.id]: { title: v, upd: Date.now() } } } }, true); toast('{直|なお}しました');
+  } else if (cmd.type === 'cat') {
+    op({ t: 'merge', doc: 'prayers', data: { items: { [p.id]: { cat: cmd.cat, upd: Date.now() } } } }, true); toast('{分類|ぶんるい}を{変|か}えました');
+  } else if (cmd.type === 'yes') {
+    op({ t: 'merge', doc: 'prayers', data: { items: { [p.id]: { status: 'yes', doneAt: today(), upd: Date.now() } } } }, true); celebrate();
+  } else {
+    op({ t: 'del', doc: 'prayers', path: `items.${p.id}` }, true); toast('{削除|さくじょ}しました');
+  }
+  VC = null; closeModal(); render();
+}
+function vDictate(el) {
+  const f = document.getElementById(el.dataset.v); if (!f) return;
+  const base = f.value.trim();
+  el.classList.add('on');
+  const r = listen(t => {
+    el.classList.remove('on');
+    if (!t) return;
+    const c = cleanSpeech(t);
+    f.value = (base ? base + (f.tagName === 'TEXTAREA' ? '\n' : '') : '') + c;
+    if (f.id === 'pT' && !document.querySelector('#pC button.on')) { const sg = suggestCat(f.value); if (sg) { document.querySelector(`#pC button[data-v="${sg}"]`).classList.add('on'); const n = document.getElementById('pSug'); if (n) n.innerHTML = T(`💡 「${catOf(sg).name}」をおすすめしました。ちがうときは{選|えら}びなおしてね`); } }
+  }, t => { f.value = (base ? base + ' ' : '') + t; });
+  if (!r) el.classList.remove('on');
+}
+
+/* --- まとめて取り込み(C) --- */
+const CLAUDE_REQ = `次のご祈念項目を、4分類（仕事・自分・家族・周囲の人）に整理して、お題目帳アプリに取り込める形式で出してください。
+・分類ごとに「### 仕事」「### 自分」「### 家族」「### 周囲の人」の見出しをつける
+・項目は1行ずつ「- [ ] 祈念チェック　[ ] 達成チェック　項目の文章」
+・期日があれば行末に「｜いつまでに 2026-12-31」、お気に入りは「｜⭐」、自分だけにしたいものは「｜🔒」、くわしい説明は「｜くわしく：〜」
+・私が言った文言・人数・社数などの数値は変えない。分からないものは推測で作らない
+・最後に、取り込み用の部分だけをコードブロックで出す`;
+function parseDate(s) {
+  let m;
+  if ((m = s.match(/(\d{4})[-/年.](\d{1,2})[-/月.](\d{1,2})/))) return `${m[1]}-${pad(+m[2])}-${pad(+m[3])}`;
+  if ((m = s.match(/(\d{1,2})[/月](\d{1,2})日?/))) { const t = today(); let y = +t.slice(0, 4); const d = `${y}-${pad(+m[1])}-${pad(+m[2])}`; return d < t ? `${y + 1}-${pad(+m[1])}-${pad(+m[2])}` : d; }
+  return '';
+}
+function parseImport(txt) {
+  const out = []; let cat = null;
+  for (const raw of String(txt).split(/\r?\n/)) {
+    let l = raw.normalize('NFKC').trim(); if (!l || /^```/.test(l) || /^※/.test(l)) continue;
+    const h = l.match(/^(?:#{1,6}\s*|【|■|◆|\[)\s*(.+?)\s*(?:】|\])?\s*$/);
+    const bare = l.replace(/[*【】■◆#\[\]\s:：]/g, '');
+    if (h || catFromWord(bare)) {
+      const name = (h ? h[1] : bare).replace(/[*【】]/g, '').replace(/^\d+[.)]\s*/, '').replace(/[:：].*$/, '').trim();
+      cat = catFromWord(name); continue;
+    }
+    if (!cat) continue;
+    if (!/^(?:[-*・•●]|\d+[.)]|\\?\[)/.test(l)) continue;
+    let t = l.replace(/^(?:[-*・•●]\s*|\d+[.)]\s*)/, '');
+    let ach = false, pr = false;
+    t = t.replace(/\\?\[\s*([xX✓✔]?)\s*\\?\]\s*(祈念|達成)(?:チェック)?/g, (m0, x, k) => { if (x) { if (k === '達成') ach = true; else pr = true; } return ''; });
+    t = t.replace(/\\/g, '');
+    const parts = t.split(/[｜|]/).map(x => x.trim());
+    const title = parts.shift().replace(/^[　\s]+|[　\s]+$/g, '');
+    if (!title) continue;
+    const it = { cat, title, due: '', fav: false, vis: 'family', body: '', ach, pr };
+    for (const x of parts) {
+      if (/⭐|★|お気に入り/.test(x)) it.fav = true;
+      else if (/🔒|自分だけ/.test(x)) it.vis = 'me';
+      else if (/^くわしく[:：]?/.test(x)) it.body = x.replace(/^くわしく[:：]?\s*/, '');
+      else if (/達成/.test(x)) it.ach = true;
+      else if (parseDate(x)) it.due = parseDate(x);
+    }
+    out.push(it);
+  }
+  const mine = prayers().filter(p => p.owner === L.me).map(p => norm(p.title));
+  for (const it of out) it.dup = mine.includes(norm(it.title));
+  return out;
+}
+let IMP = [];
+function importModal() {
+  if (!L.me) return whoModal();
+  IMP = [];
+  openModal(`<h3>📋 まとめて{取|と}り{込|こ}み</h3>
+    <div class="note" style="margin-top:0">Claudeで{整理|せいり}した{一覧|いちらん}を{貼|は}り{付|つ}けてください。「### {仕事|しごと}」などの{見出|みだ}しと「- [ ] {祈念|きねん}チェック [ ] {達成|たっせい}チェック {項目|こうもく}」の{形|かたち}を{読|よ}み{取|と}ります。</div>
+    <textarea id="impTx" style="min-height:150px" placeholder="### 仕事&#10;- [ ] 祈念チェック　[ ] 達成チェック　新規獲得四社 ｜⭐"></textarea>
+    <div class="mbtns" style="margin-top:8px"><button data-act="impreq">Claudeへのお{願|ねが}い{文|ぶん}をコピー</button><button class="pri" data-act="impread">{読|よ}み{取|と}る</button></div>
+    <div id="impPrev"></div>`);
+}
+function importPreview() {
+  IMP = parseImport(document.getElementById('impTx').value);
+  const el = document.getElementById('impPrev');
+  if (!IMP.length) { el.innerHTML = T('<div class="note" style="color:var(--warn)">{項目|こうもく}が{見|み}つかりませんでした。{見出|みだ}し(### {仕事|しごと} など)の{下|した}に「- 」で{始|はじ}まる{行|ぎょう}があるか{確|たし}かめてね</div>'); return; }
+  el.innerHTML = T(`<div class="imprev">${CATS.map(c => {
+    const rows = IMP.map((it, i) => [it, i]).filter(([it]) => it.cat === c.id);
+    if (!rows.length) return '';
+    return `<div class="imph">${c.icon} ${c.name}</div>` + rows.map(([it, i]) => `<label class="improw ${it.dup ? 'dup' : ''}"><input type="checkbox" data-i="${i}" ${it.dup ? '' : 'checked'}><span>${esc(it.title)}<small>${[it.fav ? '⭐' : '', it.vis === 'me' ? '🔒' : '', it.due ? '📅' + esc(it.due) : '', it.ach ? '🎉{達成|たっせい}' : '', it.dup ? 'すでにあります' : ''].filter(Boolean).join(' ')}</small></span></label>`).join('');
+  }).join('')}</div>
+  <div class="mbtns"><button data-act="mclose">やめる</button><button class="pri" data-act="impsave">チェックした{項目|こうもく}を{登録|とうろく}</button></div>`);
+}
+function importSave() {
+  const sel = [...document.querySelectorAll('#impPrev input[type=checkbox]:checked')].map(x => IMP[+x.dataset.i]);
+  if (!sel.length) return toast('{登録|とうろく}する{項目|こうもく}がありません');
+  const items = {}, td = today(); let n = 0;
+  for (const it of sel) {
+    items[newId() + (n++)] = { owner: L.me, cat: it.cat, fav: it.fav, title: it.title, body: it.body, due: it.due, vis: it.vis, status: it.ach ? 'yes' : 'praying', result: '', doneAt: it.ach ? td : '', ...(it.pr ? { pd: { [dkey(td)]: true } } : {}), created: Date.now() + n, upd: Date.now() };
+  }
+  op({ t: 'merge', doc: 'prayers', data: { items } }, true);
+  closeModal(); render(); toast(`${sel.length}{件|けん}を{登録|とうろく}しました`);
+}
+function exportText() {
+  const mine = prayers().filter(p => p.owner === L.me), td = today();
+  let s = `## ご祈念項目一覧（お題目帳 ${td} 書き出し）\n`;
+  for (const c of CATS) {
+    s += `\n### ${plain(c.name)}\n`;
+    const list = mine.filter(p => p.cat === c.id).sort((a, b) => (a.created || 0) - (b.created || 0));
+    if (!list.length) s += '（なし）\n';
+    for (const p of list) {
+      const opt = [p.due ? `いつまでに ${p.due}` : '', p.fav ? '⭐' : '', p.vis === 'me' ? '🔒' : '', p.status === 'no' ? '叶わなかった' : '', p.body ? `くわしく：${p.body.replace(/\n/g, ' ')}` : ''].filter(Boolean);
+      s += `- [${prayedOn(p, td) ? 'x' : ' '}] 祈念チェック　[${p.status === 'yes' ? 'x' : ' '}] 達成チェック　${p.title}${opt.length ? ' ｜' + opt.join(' ｜') : ''}\n`;
+    }
+  }
+  const un = mine.filter(p => !CATS.some(c => c.id === p.cat));
+  if (un.length) { s += `\n### 未分類\n`; for (const p of un) s += `- [ ] 祈念チェック　[ ] 達成チェック　${p.title}\n`; }
+  return s;
+}
+function copyModal(title, text) {
+  openModal(`<h3>${title}</h3><textarea id="cpTx" style="min-height:220px;font-size:13px">${esc(text)}</textarea>
+    <div class="mbtns"><button data-act="mclose">とじる</button><button class="pri" data-act="cpgo">コピーする</button></div>`);
+}
+async function copyNow(text) {
+  try { await navigator.clipboard.writeText(text); toast('コピーしました'); return true; }
+  catch (e) { const t = document.getElementById('cpTx'); if (t) { t.select(); try { document.execCommand('copy'); toast('コピーしました'); return true; } catch (e2) {} } toast('{長押|ながお}しして{全部|ぜんぶ}{選|えら}んでコピーしてね'); return false; }
 }
 
 /* ---------- せってい ---------- */
@@ -852,7 +1288,7 @@ function vSet() {
    ============================================================ */
 const $modal = document.getElementById('modal');
 function openModal(html) { $modal.innerHTML = T(`<div class="mbg" data-act="mclose"></div><div class="mbox">${html}</div>`); }
-function closeModal() { $modal.innerHTML = ''; }
+function closeModal() { stopRec(true); $modal.innerHTML = ''; }
 function whoModal(force) {
   openModal(`<h3>このスマホを{使|つか}うのは だれ?</h3>
     <div class="whos">${PEOPLE.map(p => `<button style="--c:${p.color}" class="${L.me === p.id ? 'on' : ''}" data-act="setme" data-v="${p.id}" data-close="1"><span class="av" style="background:${p.color}">${p.emoji}</span>${p.rb}</button>`).join('')}</div>
@@ -893,36 +1329,57 @@ function recSave(id) {
   closeModal(); ST.sel = d; ST.ym = d.slice(0, 7); render();
   toast(old ? '{直|なお}しました' : '{追加|ついか}しました');
 }
-function prayModal(id) {
+function prayModal(id, cat, pre) {
   const p = id ? prayers().find(x => x.id === id) : null;
-  const v = p || { title: '', body: '', due: '', vis: 'family', status: 'praying', result: '' };
+  const v = p || { title: (pre && pre.title) || '', body: '', due: '', vis: 'family', status: 'praying', result: '', cat: cat || '', fav: false };
   openModal(`<h3>${p ? '{御祈念|ごきねん}{項目|こうもく}を{直|なお}す' : '{御祈念|ごきねん}{項目|こうもく}をつくる'}</h3>
-    <label class="fl">ねがい</label><input type="text" id="pT" maxlength="80" value="${esc(v.title)}" placeholder="${plain('{例|れい}:{家族|かぞく}みんなが{健康|けんこう}でいられますように')}">
-    <label class="fl">くわしく({自由|じゆう}に{書|か}いてね)</label><textarea id="pB" maxlength="1000">${esc(v.body || '')}</textarea>
+    ${pre && pre.heard ? `<div class="heard">🎤「${esc(pre.heard)}」</div>` : ''}
+    <label class="fl">{分類|ぶんるい}</label>
+    <div class="note" id="pSug" style="margin:-2px 0 6px">${pre && pre.suggested ? `💡 「${catOf(v.cat).name}」をおすすめしました。ちがうときは{選|えら}びなおしてね` : (pre && pre.heard && !v.cat ? '{分類|ぶんるい}を{選|えら}んでね' : '')}</div>
+    <div class="catsel" id="pC">${CATS.map(c => `<button class="${v.cat === c.id ? 'on' : ''}" data-act="pcat" data-v="${c.id}"><span>${c.icon}</span>${c.name}</button>`).join('')}</div>
+    <label class="fl fmic">ねがい<button class="mini" data-act="vdict" data-v="pT">🎤 {話|はな}して{入力|にゅうりょく}</button></label><input type="text" id="pT" maxlength="120" value="${esc(v.title)}" placeholder="${plain('{例|れい}:{家族|かぞく}みんなが{健康|けんこう}でいられますように')}">
+     <label class="fl fmic">くわしく({自由|じゆう}に{書|か}いてね)<button class="mini" data-act="vdict" data-v="pB">🎤</button></label><textarea id="pB" maxlength="1000">${esc(v.body || '')}</textarea>
     <label class="fl">いつまでに</label>
     <div class="durin"><input type="date" id="pD" value="${v.due || ''}" style="width:auto!important;flex:1"><button class="btn2" style="margin:0" data-act="pdclear">きめない</button></div>
     <label class="fl">だれに{見|み}せる?</label>
     <div class="wseg plain" id="pV"><button class="${v.vis === 'family' ? 'on' : ''}" data-act="pvis" data-v="family">👪 {家族|かぞく}で{見|み}る</button><button class="${v.vis !== 'family' ? 'on' : ''}" data-act="pvis" data-v="me">🔒 {自分|じぶん}だけ</button></div>
+    <button class="tg" data-act="pfavm" id="pF" data-on="${v.fav ? 1 : 0}"><span class="sw ${v.fav ? 'on' : ''}"></span>⭐ お{気|き}に{入|い}りにする</button>
     ${p ? `<label class="fl">けっか</label>
     <div class="wseg plain" id="pS">${['praying', 'yes', 'no'].map(k => `<button class="${v.status === k ? 'on' : ''}" data-act="pst" data-v="${k}">${STATUS[k]}</button>`).join('')}</div>
-    <label class="fl">ふりかえりメモ(なくてもOK)</label><textarea id="pR" maxlength="1000" style="min-height:60px">${esc(v.result || '')}</textarea>` : ''}
+    <label class="fl">ふりかえりメモ(なくてもOK)</label><textarea id="pR" maxlength="1000" style="min-height:60px">${esc(v.result || '')}</textarea>
+    <p class="note">🙏 これまで{祈念|きねん}した{日|ひ}:${daysRb(prayedDays(p))}</p>` : ''}
     <div class="mbtns">${p ? `<button class="del" data-act="pdel" data-v="${p.id}">{削除|さくじょ}</button>` : ''}<button data-act="mclose">やめる</button><button class="pri" data-act="psave" data-v="${p ? p.id : ''}">{保存|ほぞん}</button></div>`);
+}
+function prayView(id) {
+  const p = prayers().find(x => x.id === id); if (!p) return;
+  const o = P(p.owner), c = catOf(p.cat);
+  openModal(`<h3>${o.emoji} ${o.rb}の{御祈念|ごきねん}</h3>
+    <div class="note" style="margin:0">${c.icon} ${c.name}</div>
+    <h4 style="margin:6px 0;font-size:17px">${esc(p.title)}</h4>
+    ${p.body ? `<div style="white-space:pre-wrap;font-size:14px">${esc(p.body)}</div>` : ''}
+    ${p.due ? `<div class="note">${dueTxt(p)}</div>` : ''}
+    <div class="note">🙏 {祈念|きねん}した{日|ひ} ${daysRb(prayedDays(p))}・${STATUS[p.status] || ''}${p.doneAt ? `(${dateRb(p.doneAt)})` : ''}</div>
+    ${p.result ? `<div class="note">${esc(p.result)}</div>` : ''}
+    <div class="mbtns"><button data-act="mclose">とじる</button></div>`);
 }
 function segVal(id) { const b = document.querySelector(`#${id} button.on`); return b ? b.dataset.v : null; }
 function prayerSave(id) {
+  const cat = segVal('pC');
+  if (!cat) return toast('{分類|ぶんるい}を{選|えら}んでね');
   const title = document.getElementById('pT').value.trim();
   if (!title) return toast('ねがいを{書|か}いてね');
   const old = id ? prayers().find(x => x.id === id) : null;
-  const status = old ? segVal('pS') : 'praying';
+  const status = old ? (segVal('pS') || 'praying') : 'praying';
   const item = {
-    owner: old ? old.owner : L.me, title, body: document.getElementById('pB').value.trim(),
+    owner: old ? old.owner : L.me, cat, fav: document.getElementById('pF').dataset.on === '1',
+    title, body: document.getElementById('pB').value.trim(),
     due: document.getElementById('pD').value || '', vis: segVal('pV') || 'family', status,
     result: old ? document.getElementById('pR').value.trim() : '',
     doneAt: status === 'praying' ? '' : ((old && old.status === status && old.doneAt) || today()),
     created: old ? old.created || Date.now() : Date.now(), upd: Date.now()
   };
   op({ t: 'merge', doc: 'prayers', data: { items: { [id || newId()]: item } } }, true);
-  closeModal(); PR.tab = status; render();
+  closeModal(); render();
   if (status === 'yes' && (!old || old.status !== 'yes')) celebrate(); else toast('{保存|ほぞん}しました');
 }
 function celebrate() {
@@ -944,7 +1401,7 @@ const ACT = {
   tab: el => { CUR = el.dataset.v; window.scrollTo(0, 0); render(); },
   who: () => whoModal(),
   setme: el => {
-    const was = L.me; L.me = el.dataset.v; saveL();
+    const was = L.me; L.me = el.dataset.v; saveL(); seedPrayers();
     if (was && was !== L.me && TS.running) { tStop(); }
     if (ST.who === was || !ST.who) ST.who = L.me;
     closeModal();
@@ -995,10 +1452,26 @@ const ACT = {
     if (!confirm('この記録を削除しますか?')) return;
     op({ t: 'del', doc: recDoc(r), path: `recs.${r.id}` }, true); closeModal(); render(); toast('{削除|さくじょ}しました');
   },
-  ptab: el => { PR.tab = el.dataset.v; render(); },
+  voice: () => voiceModal(),
+  vmic: () => { if (REC) stopRec(false); else vStart(true); },
+  vgo: () => vGo(),
+  vpick: el => { VC.pick = el.dataset.v; vChangeModal(); },
+  vapply: () => vApply(),
+  vdict: el => { if (REC) { stopRec(false); return; } vDictate(el); },
+  imp: () => importModal(),
+  impread: () => importPreview(),
+  impsave: () => importSave(),
+  impreq: () => copyModal('Claudeへのお{願|ねが}い{文|ぶん}', CLAUDE_REQ),
+  exp: () => copyModal('📤 {一覧|いちらん}(Claudeに{渡|わた}す{用|よう})', exportText()),
+  cpgo: () => copyNow(document.getElementById('cpTx').value),
+  pfavf: el => { PR.fav = el.dataset.v === '1'; render(); },
   pfam: () => { PR.fam = !PR.fam; render(); },
-  pnew: () => { if (!L.me) return whoModal(); prayModal(null); },
+  pdone: () => { PR.done = !PR.done; render(); },
+  pnew: el => { if (!L.me) return whoModal(); prayModal(null, el.dataset.v); },
   pedit: el => prayModal(el.dataset.v),
+  pview: el => prayView(el.dataset.v),
+  pcat: el => document.querySelectorAll('#pC button').forEach(b => b.classList.toggle('on', b === el)),
+  pfavm: el => { const on = el.dataset.on !== '1'; el.dataset.on = on ? '1' : '0'; el.querySelector('.sw').classList.toggle('on', on); },
   pvis: el => document.querySelectorAll('#pV button').forEach(b => b.classList.toggle('on', b === el)),
   pst: el => document.querySelectorAll('#pS button').forEach(b => b.classList.toggle('on', b === el)),
   pdclear: () => { document.getElementById('pD').value = ''; },
@@ -1007,13 +1480,21 @@ const ACT = {
     if (!confirm('この御祈念項目を削除しますか?')) return;
     op({ t: 'del', doc: 'prayers', path: `items.${el.dataset.v}` }, true); closeModal(); render(); toast('{削除|さくじょ}しました');
   },
-  pstat: el => {
-    const p = prayers().find(x => x.id === el.dataset.id); if (!p) return;
-    const v = el.dataset.v;
-    const { id: pid, ...rest } = p;
-    op({ t: 'merge', doc: 'prayers', data: { items: { [pid]: { ...rest, status: v, doneAt: v === 'praying' ? '' : today(), upd: Date.now() } } } }, true);
-    render();
-    if (v === 'yes') celebrate(); else toast(v === 'no' ? '{記録|きろく}しました' : '{祈念中|きねんちゅう}にもどしました');
+  pray1: el => {
+    const p = prayers().find(x => x.id === el.dataset.v); if (!p) return;
+    const k = dkey(today());
+    if (prayedOn(p, today())) op({ t: 'del', doc: 'prayers', path: `items.${p.id}.pd.${k}` });
+    else op({ t: 'merge', doc: 'prayers', data: { items: { [p.id]: { pd: { [k]: true } } } } });
+  },
+  pach: el => {
+    const p = prayers().find(x => x.id === el.dataset.v); if (!p) return;
+    const yes = p.status !== 'yes';
+    op({ t: 'merge', doc: 'prayers', data: { items: { [p.id]: { status: yes ? 'yes' : 'praying', doneAt: yes ? today() : '', upd: Date.now() } } } });
+    if (yes) celebrate();
+  },
+  pfav: el => {
+    const p = prayers().find(x => x.id === el.dataset.v); if (!p) return;
+    op({ t: 'merge', doc: 'prayers', data: { items: { [p.id]: { fav: !p.fav } } } });
   },
   furi: el => { L.furi = el.dataset.v === '1'; saveL(); renderHeader(); render(); },
   snd: el => { L.sound = el.dataset.v === '1'; saveL(); render(); },
@@ -1052,11 +1533,11 @@ document.addEventListener('input', e => { if (e.target.id === 'fM' || e.target.i
 document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible') { if (TS.running) wake(true); render(); } });
 
 /* ---------- 起動 ---------- */
-rebuild(); renderHeader(); render();
+rebuild(); if (LOCAL_ONLY) seedPrayers(); renderHeader(); render();
 if (!L.me) whoModal();
 initFirebase();
 if ('serviceWorker' in navigator && location.protocol.startsWith('http')) navigator.serviceWorker.register('sw.js').catch(() => {});
-window.__od = { get DOCS() { return DOCS; }, get RECS() { return RECS; }, TS, L, get MODE() { return MODE; } };
+window.__od = { cleanSpeech, parseCmd, parseAdd, suggestCat, applyChange, findTargets, parseImport, exportText, get DOCS() { return DOCS; }, get RECS() { return RECS; }, TS, L, get MODE() { return MODE; } };
 </script>
 </body>
 </html>
