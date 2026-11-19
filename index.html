@@ -34,7 +34,7 @@ ruby{ruby-position:over}
 
 /* nav */
 #tabs{position:fixed;left:0;right:0;bottom:0;z-index:20;background:#fff;border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom)}
-#tabs .in{max-width:540px;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr)}
+#tabs .in{max-width:540px;margin:0 auto;display:grid;grid-template-columns:repeat(5,1fr)}
 #tabs button{display:flex;flex-direction:column;align-items:center;gap:1px;padding:7px 0 8px;font-size:11px;color:#94a2b0}
 #tabs button .ic{font-size:21px;line-height:1.2;filter:grayscale(1);opacity:.6}
 #tabs button.on{color:var(--navy);font-weight:700}
@@ -268,6 +268,42 @@ ruby{ruby-position:over}
 .improw small{display:block;font-size:11.5px;color:var(--sub)}
 .improw.dup{opacity:.55}
 
+/* words */
+#tabs button{font-size:10.5px}
+.wsearch{width:100%;border:1.5px solid var(--line);border-radius:12px;padding:10px 12px;font-size:15px;background:#fbfcfd}
+.wchips{display:flex;gap:6px;overflow-x:auto;margin-top:10px;padding-bottom:2px}
+.wchips button{flex:none;padding:6px 12px;border-radius:99px;background:#eef2f5;font-size:13px;white-space:nowrap}
+.wchips button.on{background:var(--navy);color:#fff;font-weight:700}
+.wcard{display:flex;gap:12px;width:100%;text-align:left;background:#fff;border-radius:16px;padding:12px;margin-top:10px;box-shadow:0 1px 3px rgba(20,60,90,.06);align-items:flex-start}
+.wthumb{width:84px;height:84px;border-radius:10px;object-fit:cover;flex:none;background:#eef2f5}
+.wthumb.noimg{opacity:.4}
+.wnoph{display:grid;place-items:center;font-size:34px}
+.wbody{flex:1;min-width:0;display:flex;flex-direction:column;gap:3px}
+.wmeta{display:flex;justify-content:space-between;font-size:12px;color:var(--pri2);font-weight:700}
+.wfav{color:#f4b400;font-size:15px}
+.wtxt{font-size:14.5px;line-height:1.55;white-space:pre-wrap;display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden}
+.wdim{color:var(--sub)}
+.wmeta2{font-size:11.5px;color:var(--sub)}
+.wtoday{display:block;width:100%;text-align:left;background:linear-gradient(135deg,#fffaf0,#fff);border:1px solid #f2e3c4}
+.wtrow{display:flex;gap:12px;align-items:flex-start}
+.wtx{flex:1;font-size:15px;line-height:1.6;white-space:pre-wrap;display:-webkit-box;-webkit-line-clamp:5;-webkit-box-orient:vertical;overflow:hidden}
+.wtx small{display:block;font-size:11.5px;color:var(--sub);margin-top:4px;white-space:normal}
+.wph{border:1.5px dashed var(--line);border-radius:12px;min-height:90px;display:grid;place-items:center;overflow:hidden;background:#fbfcfd}
+.wph img{max-width:100%;max-height:260px;display:block}
+.wph0{color:var(--sub);font-size:13px;padding:24px}
+.wphb{display:flex;gap:6px;margin-top:6px}
+.wphb .btn2{margin:0;flex:1}
+.wvh{display:flex;justify-content:space-between;font-size:13px;color:var(--pri2);font-weight:700;margin-bottom:8px}
+.wbig{width:100%;border-radius:12px;display:block;background:#eef2f5;min-height:120px;cursor:zoom-in}
+.wmemo{white-space:pre-wrap;font-size:16px;line-height:1.75;margin-top:12px;padding:12px 14px;background:#fffaf0;border-radius:12px;border-left:4px solid #e0b25a}
+#viewer{display:none;position:fixed;inset:0;background:#111;z-index:80;flex-direction:column}
+#viewer.on{display:flex}
+.vwbar{display:flex;justify-content:space-between;padding:calc(10px + env(safe-area-inset-top)) 12px 10px;gap:8px}
+.vwbar button{color:#fff;background:rgba(255,255,255,.15);border-radius:99px;padding:8px 14px;font-size:14px;font-weight:700}
+.vwin{flex:1;overflow:auto;-webkit-overflow-scrolling:touch;touch-action:pan-x pan-y pinch-zoom}
+.vwin img{display:block;width:100%;height:auto}
+.vwin.big img{width:220%;max-width:none}
+
 /* settings */
 .srow{padding:12px 0;border-bottom:1px solid var(--line)}
 .srow:last-child{border-bottom:0}
@@ -314,6 +350,7 @@ ruby{ruby-position:over}
 <nav id="tabs"></nav>
 <div id="modal"></div>
 <div id="toast"></div>
+<div id="viewer"></div>
 <script type="module">
 /* ============================================================
    お題目帳(家族3人で共有する唱題記録アプリ)
@@ -436,6 +473,8 @@ function applyLocal(o) {
 }
 function remote(o) {
   if (!fs || !db) return Promise.reject(new Error('no db'));
+  if (o.t === 'photo') return IDB.get(o.key).then(d => d ? fs.setDoc(fs.doc(db, COL, o.key), { d, at: Date.now() }) : null);
+  if (o.t === 'pdel') return fs.deleteDoc(fs.doc(db, COL, o.key));
   const ref = fs.doc(db, COL, o.doc);
   if (o.t === 'merge') return fs.setDoc(ref, o.data, { merge: true });
   return fs.updateDoc(ref, { [o.path]: fs.deleteField() }).catch(e => { if (e && e.code === 'not-found') return; throw e; });
@@ -471,7 +510,7 @@ async function initFirebase() {
     fs = F; db = d;
     const slow = setTimeout(() => { if (MODE !== 'cloud') setMode('local', 'つながるまで、この端末に保存しています'); }, 12000);
     let unsub = null;
-    unsub = F.onSnapshot(F.collection(db, COL), { includeMetadataChanges: true }, snap => {
+    unsub = F.onSnapshot(F.query(F.collection(db, COL), F.where(F.documentId(), '<', 'zz')), { includeMetadataChanges: true }, snap => {
       const nd = {}; snap.forEach(x => nd[x.id] = x.data());
       const fromCache = snap.metadata.fromCache;
       if (!(fromCache && snap.empty && Object.keys(DOCS).length)) { DOCS = nd; rebuild(); saveCache(); }
@@ -620,7 +659,7 @@ function renderHeader() {
     <button class="me" data-act="who">${me ? `<span class="av" style="background:${me.color}">${me.emoji}</span>${me.rb}` : 'だれ?'}</button></div>`);
 }
 function renderNav() {
-  const tabs = [['home', '🙏', 'ホーム'], ['stats', '📊', '{題目|だいもく}{実績|じっせき}'], ['pray', '📝', '{御祈念|ごきねん}{項目|こうもく}'], ['set', '⚙️', 'せってい']];
+  const tabs = [['home', '🙏', 'ホーム'], ['stats', '📊', '{題目|だいもく}{実績|じっせき}'], ['pray', '📝', '{御祈念|ごきねん}{項目|こうもく}'], ['words', '📖', '{言葉|ことば}'], ['set', '⚙️', 'せってい']];
   document.getElementById('tabs').innerHTML = T(`<div class="in">${tabs.map(([k, i, l]) =>
     `<button class="${CUR === k ? 'on' : ''}" data-act="tab" data-v="${k}"><span class="ic">${i}</span><span>${l}</span></button>`).join('')}</div>`);
 }
@@ -629,10 +668,11 @@ function render() {
   if (a && $main.contains(a) && /INPUT|TEXTAREA|SELECT/.test(a.tagName)) { needRender = true; return; }
   needRender = false;
   if (!ST.who) ST.who = L.me || 'all';
-  const v = { home: vHome, stats: vStats, pray: vPray, set: vSet }[CUR];
+  const v = { home: vHome, stats: vStats, pray: vPray, words: vWords, set: vSet }[CUR];
   $main.innerHTML = T(v());
   renderNav();
   if (CUR === 'home') tick();
+  hydratePhotos($main);
 }
 $main.addEventListener('focusout', () => setTimeout(() => { if (needRender) render(); }, 50));
 
@@ -685,6 +725,9 @@ function vHome() {
     </div>
   </section>
   ${myP.length ? `<button class="card pgo" data-act="tab" data-v="pray"><span>🙏 きょうの{御祈念|ごきねん}</span><b>${myP.filter(p => prayedOn(p, td)).length} / ${myP.length}</b><span class="arr">›</span></button>` : ''}
+  ${(() => { const w = todayWord(); if (!w) return ''; const c = wcatOf(w.cat); return `<button class="card wtoday" data-act="wopen" data-v="${w.id}">
+    <div class="cttl">📖 きょうの{一言|ひとこと}<small>{心|こころ}に{刻|きざ}む{言葉|ことば}より</small></div>
+    <div class="wtrow">${w.photo ? `<img class="wthumb" data-ph="zz_t_${w.id}" alt="">` : ''}<div class="wtx">${w.memo ? esc(w.memo) : '({写真|しゃしん})'}<small>${c.icon} ${c.name}${w.date ? '・' + dateRbY(w.date) : ''}</small></div></div></button>`; })()}
   ${L.me ? `<section class="card">
     <div class="cttl">${P(L.me).emoji} わたしの{記録|きろく}<small>${stk ? `🔥 ${stk}{日|にち}れんぞく` : ''}</small></div>
     <div class="mytot">
@@ -932,6 +975,198 @@ function seedPrayers() {
   L.seeded1 = true; saveL();
 }
 
+
+
+/* ============================================================
+   📖 心に刻む言葉(写真+メモ)
+   words           : { items: { id: {owner,cat,memo,src,date,fav,vis,photo,pw,ph,created,upd} } }
+   zz_p_<id> / zz_t_<id> : 写真(大きい版/小さい版)。最初の読み込みには含めず、必要なときだけ取りに行く
+   ============================================================ */
+const WCATS = [
+  { id: 'ikeda', icon: '🌸', name: '{池田先生|いけだせんせい}の{言葉|ことば}' },
+  { id: 'gosho', icon: '📜', name: '{御書|ごしょ}' },
+  { id: 'shido', icon: '💡', name: '{指導|しどう}' },
+  { id: 'other', icon: '📝', name: 'その{他|た}' },
+];
+const wcatOf = id => WCATS.find(c => c.id === id) || WCATS[3];
+const WST = { cat: 'all', q: '', fam: true };
+let WEDIT = null;
+const words = () => Object.entries((DOCS.words && DOCS.words.items) || {}).filter(([, v]) => v).map(([id, v]) => ({ ...v, id }));
+const visibleWords = () => words().filter(w => w.owner === L.me || (WST.fam && w.vis === 'family'));
+const wordSort = (a, b) => (b.date || '').localeCompare(a.date || '') || (b.created || 0) - (a.created || 0);
+const dateRbY = d => `${parseD(d).getFullYear()}{年|ねん}${dateRb(d)}`;
+
+/* --- 写真の保存場所(端末のIndexedDB+クラウド) --- */
+const IDB = {
+  db: null,
+  open() {
+    if (this.db) return Promise.resolve(this.db);
+    return new Promise((res, rej) => {
+      const r = indexedDB.open('odaimoku-photos' + (LOCAL_ONLY ? '-test' : ''), 1);
+      r.onupgradeneeded = () => r.result.createObjectStore('p');
+      r.onsuccess = () => { this.db = r.result; res(this.db); };
+      r.onerror = () => rej(r.error);
+    });
+  },
+  async get(k) { try { const d = await this.open(); return await new Promise(res => { const q = d.transaction('p').objectStore('p').get(k); q.onsuccess = () => res(q.result || null); q.onerror = () => res(null); }); } catch (e) { return null; } },
+  async set(k, v) { try { const d = await this.open(); return await new Promise(res => { const t = d.transaction('p', 'readwrite'); t.objectStore('p').put(v, k); t.oncomplete = () => res(true); t.onerror = () => res(false); }); } catch (e) { return false; } },
+  async del(k) { try { const d = await this.open(); return await new Promise(res => { const t = d.transaction('p', 'readwrite'); t.objectStore('p').delete(k); t.oncomplete = () => res(true); t.onerror = () => res(false); }); } catch (e) { return false; } },
+};
+const PHC = {};
+async function getPhoto(key) {
+  if (PHC[key]) return PHC[key];
+  let v = await IDB.get(key);
+  if (!v && MODE === 'cloud' && fs && db) {
+    try { const sn = await fs.getDoc(fs.doc(db, COL, key)); if (sn.exists()) { v = sn.data().d; IDB.set(key, v); } } catch (e) { console.warn(e); }
+  }
+  if (v) PHC[key] = v;
+  return v;
+}
+async function putPhoto(key, data) {
+  PHC[key] = data; await IDB.set(key, data);
+  if (MODE === 'cloud') fs.setDoc(fs.doc(db, COL, key), { d: data, at: Date.now() }).catch(() => queue({ t: 'photo', key }));
+  else queue({ t: 'photo', key });
+}
+function delPhoto(key) {
+  delete PHC[key]; IDB.del(key);
+  if (MODE === 'cloud') fs.deleteDoc(fs.doc(db, COL, key)).catch(() => queue({ t: 'pdel', key }));
+  else queue({ t: 'pdel', key });
+}
+async function hydratePhotos(root) {
+  const imgs = (root || document).querySelectorAll('img[data-ph]:not([data-ok])');
+  for (const im of imgs) {
+    im.dataset.ok = '1';
+    (async () => {
+      if (im.dataset.fb) { const t = await getPhoto(im.dataset.fb); if (t && !im.src) im.src = t; }
+      const v = await getPhoto(im.dataset.ph);
+      if (v) im.src = v; else if (!im.src) im.classList.add('noimg');
+    })();
+  }
+}
+async function fileToJpeg(file, max, q0, limit) {
+  let bmp;
+  try { bmp = await createImageBitmap(file, { imageOrientation: 'from-image' }); }
+  catch (e) { bmp = await new Promise((res, rej) => { const im = new Image(); im.onload = () => res(im); im.onerror = rej; im.src = URL.createObjectURL(file); }); }
+  const W = bmp.width, H = bmp.height; let m = max, q = q0, out = null, cw = W, ch = H;
+  for (let i = 0; i < 8; i++) {
+    const sc = Math.min(1, m / Math.max(W, H)); cw = Math.round(W * sc); ch = Math.round(H * sc);
+    const c = document.createElement('canvas'); c.width = cw; c.height = ch;
+    const g = c.getContext('2d'); g.fillStyle = '#fff'; g.fillRect(0, 0, cw, ch); g.drawImage(bmp, 0, 0, cw, ch);
+    out = c.toDataURL('image/jpeg', q);
+    if (out.length <= limit) break;
+    if (q > 0.62) q -= 0.08; else m = Math.round(m * 0.85);
+  }
+  return { data: out, w: cw, h: ch };
+}
+
+/* --- 画面 --- */
+function todayWord() {
+  const list = visibleWords().sort((a, b) => (a.created || 0) - (b.created || 0));
+  if (!list.length) return null;
+  const favs = list.filter(w => w.fav);
+  const day = Math.floor(parseD(today()).getTime() / 864e5);
+  const pool = favs.length && day % 2 === 0 ? favs : list;
+  return pool[day % pool.length];
+}
+function wordCard(w) {
+  const c = wcatOf(w.cat), o = P(w.owner), mine = w.owner === L.me;
+  return `<button class="wcard" data-act="wopen" data-v="${w.id}">
+    ${w.photo ? `<img class="wthumb" data-ph="zz_t_${w.id}" alt="">` : `<span class="wthumb wnoph">${c.icon}</span>`}
+    <span class="wbody">
+      <span class="wmeta"><span>${c.icon} ${c.name}</span>${w.fav ? '<span class="wfav">★</span>' : ''}</span>
+      ${w.memo ? `<span class="wtxt">${esc(w.memo)}</span>` : `<span class="wtxt wdim">({写真|しゃしん})</span>`}
+      <span class="wmeta2">${w.date ? dateRbY(w.date) : ''}${w.src ? `・${esc(w.src)}` : ''}${!mine ? `・<span style="color:${o.color}">${o.emoji}${o.rb}</span>` : ''}${w.vis === 'me' ? '・🔒' : ''}</span>
+    </span></button>`;
+}
+function wordList() {
+  let list = visibleWords();
+  if (WST.cat === 'fav') list = list.filter(w => w.fav);
+  else if (WST.cat !== 'all') list = list.filter(w => w.cat === WST.cat);
+  const q = norm(WST.q);
+  if (q) list = list.filter(w => norm((w.memo || '') + ' ' + (w.src || '')).includes(q));
+  list.sort(wordSort);
+  if (!list.length) return `<div class="empty"><span class="ei">📖</span>${WST.q ? '{見|み}つかりませんでした' : 'まだありません。「＋ {言葉|ことば}を{残|のこ}す」から{写真|しゃしん}やメモを{保存|ほぞん}してね'}</div>`;
+  return `<div class="note" style="margin:10px 2px 0">${list.length}{件|けん}</div>` + list.map(wordCard).join('');
+}
+function vWords() {
+  const chips = [['all', 'すべて'], ['fav', '⭐ お{気|き}に{入|い}り'], ...WCATS.map(c => [c.id, `${c.icon} ${c.name}`])];
+  return `<section class="card">
+    <div class="cttl" style="font-size:17px">📖 {心|こころ}に{刻|きざ}む{言葉|ことば}</div>
+    <input type="search" id="wQ" class="wsearch" placeholder="${plain('🔍 {言葉|ことば}・メモで{検索|けんさく}')}" value="${esc(WST.q)}">
+    <div class="wchips">${chips.map(([k, l]) => `<button class="${WST.cat === k ? 'on' : ''}" data-act="wcatf" data-v="${k}">${l}</button>`).join('')}</div>
+    <button class="tg" data-act="wfam"><span class="sw ${WST.fam ? 'on' : ''}"></span>{家族|かぞく}が{残|のこ}した{言葉|ことば}も{見|み}る</button>
+    <button class="bigbtn" style="margin-top:12px" data-act="wnew">＋ {言葉|ことば}を{残|のこ}す(📷{写真|しゃしん}・📝メモ)</button>
+  </section>
+  <div id="wlist">${wordList()}</div>`;
+}
+function wordView(id) {
+  const w = words().find(x => x.id === id); if (!w) return;
+  const o = P(w.owner), mine = w.owner === L.me, c = wcatOf(w.cat);
+  openModal(`<div class="wvh"><span>${c.icon} ${c.name}</span><span>${w.date ? dateRbY(w.date) : ''}</span></div>
+    ${w.photo ? `<img class="wbig" data-ph="zz_p_${id}" data-fb="zz_t_${id}" data-act="wzoom" data-v="${id}" alt=""><div class="note" style="text-align:center;margin-top:2px">{写真|しゃしん}をタップすると{大|おお}きく{見|み}られます</div>` : ''}
+    ${w.memo ? `<div class="wmemo">${esc(w.memo)}</div>` : ''}
+    ${w.src ? `<div class="note" style="text-align:right">— ${esc(w.src)}</div>` : ''}
+    <div class="note">${o.emoji} ${o.rb}が{残|のこ}しました・${w.vis === 'family' ? '👪 {家族|かぞく}で{見|み}る' : '🔒 {自分|じぶん}だけ'}${w.fav ? '・⭐' : ''}</div>
+    <div class="mbtns"><button data-act="mclose">とじる</button>${w.memo ? `<button data-act="wcopy" data-v="${id}">コピー</button>` : ''}${mine ? `<button class="pri" data-act="wedit" data-v="${id}">✎ {直|なお}す</button>` : ''}</div>`);
+  hydratePhotos(document.getElementById('modal'));
+}
+function wordModal(id) {
+  if (!L.me) return whoModal();
+  const w = id ? words().find(x => x.id === id) : null;
+  const v = w || { cat: 'ikeda', memo: '', src: '', date: today(), fav: false, vis: 'family', photo: false };
+  WEDIT = { id: id || null, newPhoto: null, removePhoto: false, hadPhoto: !!(w && w.photo) };
+  openModal(`<h3>${w ? '{言葉|ことば}を{直|なお}す' : '📖 {言葉|ことば}を{残|のこ}す'}</h3>
+    <label class="fl">{写真|しゃしん}(なくてもOK)</label>
+    <div class="wph" id="wPh">${v.photo ? `<img data-ph="zz_t_${id}" alt="">` : `<div class="wph0">{写真|しゃしん}なし</div>`}</div>
+    <div class="wphb"><button class="btn2" data-act="wcam">📷 {撮|と}る</button><button class="btn2" data-act="wpick">🖼 {選|えら}ぶ</button><button class="btn2" id="wPhDel" data-act="wphdel" style="${v.photo ? '' : 'display:none'}">{外|はず}す</button></div>
+    <input type="file" id="wCam" accept="image/*" capture="environment" hidden><input type="file" id="wPick" accept="image/*" hidden>
+    <label class="fl">{分類|ぶんるい}</label>
+    <div class="catsel" id="wC">${WCATS.map(c => `<button class="${v.cat === c.id ? 'on' : ''}" data-act="wcat" data-v="${c.id}"><span>${c.icon}</span>${c.name}</button>`).join('')}</div>
+    <label class="fl fmic">ことば・メモ(なくてもOK)<button class="mini" data-act="vdict" data-v="wM">🎤</button></label>
+    <textarea id="wM" maxlength="3000" style="min-height:110px">${esc(v.memo || '')}</textarea>
+    <div class="note" style="margin-top:4px">💡 {写真|しゃしん}の{文字|もじ}は、Googleレンズで{写真|しゃしん}を{開|ひら}いて「テキストをコピー」→ ここに{貼|は}り{付|つ}けると{便利|べんり}です</div>
+    <label class="fl">{出典|しゅってん}(なくてもOK)</label><input type="text" id="wS" maxlength="80" value="${esc(v.src || '')}" placeholder="${plain('{例|れい}:{聖教新聞|せいきょうしんぶん}「{月々日々|つきづきひび}に」')}">
+    <label class="fl">{日付|ひづけ}</label><input type="date" id="wD" value="${v.date || ''}">
+    <label class="fl">だれに{見|み}せる?</label>
+    <div class="wseg plain" id="wV"><button class="${v.vis === 'family' ? 'on' : ''}" data-act="wvis" data-v="family">👪 {家族|かぞく}で{見|み}る</button><button class="${v.vis !== 'family' ? 'on' : ''}" data-act="wvis" data-v="me">🔒 {自分|じぶん}だけ</button></div>
+    <button class="tg" data-act="pfavm" id="wF" data-on="${v.fav ? 1 : 0}"><span class="sw ${v.fav ? 'on' : ''}"></span>⭐ お{気|き}に{入|い}りにする</button>
+    <div class="mbtns">${w ? `<button class="del" data-act="wdel" data-v="${id}">{削除|さくじょ}</button>` : ''}<button data-act="mclose">やめる</button><button class="pri" id="wSave" data-act="wsave">{保存|ほぞん}</button></div>`);
+  hydratePhotos(document.getElementById('modal'));
+}
+async function wordPhotoChosen(file) {
+  if (!file || !WEDIT) return;
+  const box = document.getElementById('wPh'); box.innerHTML = T('<div class="wph0">{読|よ}み{込|こ}み{中|ちゅう}…</div>');
+  try {
+    const big = await fileToJpeg(file, 1800, 0.86, 850000);
+    const th = await fileToJpeg(file, 420, 0.72, 90000);
+    WEDIT.newPhoto = { big: big.data, thumb: th.data, w: big.w, h: big.h }; WEDIT.removePhoto = false;
+    box.innerHTML = `<img src="${th.data}" alt="">`;
+    document.getElementById('wPhDel').style.display = '';
+  } catch (e) { console.warn(e); box.innerHTML = T('<div class="wph0">{写真|しゃしん}を{読|よ}み{込|こ}めませんでした</div>'); }
+}
+async function wordSave() {
+  if (!WEDIT) return;
+  const memo = document.getElementById('wM').value.trim();
+  const hasPhoto = !!WEDIT.newPhoto || (WEDIT.hadPhoto && !WEDIT.removePhoto);
+  if (!memo && !hasPhoto) return toast('{写真|しゃしん}かことばを{入|い}れてね');
+  const id = WEDIT.id || newId(), old = WEDIT.id ? words().find(x => x.id === WEDIT.id) : null;
+  document.getElementById('wSave').disabled = true;
+  if (WEDIT.newPhoto) { await putPhoto('zz_p_' + id, WEDIT.newPhoto.big); await putPhoto('zz_t_' + id, WEDIT.newPhoto.thumb); }
+  else if (WEDIT.removePhoto && WEDIT.hadPhoto) { delPhoto('zz_p_' + id); delPhoto('zz_t_' + id); }
+  const item = {
+    owner: old ? old.owner : L.me, cat: segVal('wC') || 'other', memo, src: document.getElementById('wS').value.trim(),
+    date: document.getElementById('wD').value || today(), fav: document.getElementById('wF').dataset.on === '1', vis: segVal('wV') || 'family',
+    photo: hasPhoto, pw: WEDIT.newPhoto ? WEDIT.newPhoto.w : (old && old.pw) || 0, ph: WEDIT.newPhoto ? WEDIT.newPhoto.h : (old && old.ph) || 0,
+    created: old ? old.created || Date.now() : Date.now(), upd: Date.now()
+  };
+  op({ t: 'merge', doc: 'words', data: { items: { [id]: item } } }, true);
+  WEDIT = null; closeModal(); render(); toast('{保存|ほぞん}しました');
+}
+function openViewer(id) {
+  const v = document.getElementById('viewer');
+  v.innerHTML = `<div class="vwbar"><button data-act="vwzoom">🔍 ${T('{拡大|かくだい}')}</button><button data-act="vwclose">✕ ${T('とじる')}</button></div><div class="vwin"><img data-ph="zz_p_${id}" data-fb="zz_t_${id}" alt=""></div>`;
+  v.classList.add('on'); hydratePhotos(v);
+}
 
 /* ============================================================
    🎤 音声で追加・変更(B)/ まとめて取り込み・書き出し(C)
@@ -1335,7 +1570,7 @@ function vSet() {
     <button class="btn2" data-act="bkdl">📥 ダウンロード</button>
     <button class="btn2" data-act="bkup">♻️ {復元|ふくげん}</button>
     <input type="file" id="bkfile" accept=".json,application/json" hidden>
-    <div class="sd">{家族|かぞく}の{唱題|しょうだい}{記録|きろく}と{御祈念|ごきねん}{項目|こうもく}をファイルに{保存|ほぞん}できます。</div>
+    <div class="sd">{家族|かぞく}の{唱題|しょうだい}{記録|きろく}・{御祈念|ごきねん}{項目|こうもく}・{心|こころ}に{刻|きざ}む{言葉|ことば}(メモ)をファイルに{保存|ほぞん}できます。{写真|しゃしん}はふくまれません(クラウドに{残|のこ}っています)。</div>
   </section>
   <p class="note" style="text-align:center">お{題目帳|だいもくちょう}・1{分|ぷん} = 30{遍|ぺん}で{計算|けいさん}</p>`;
 }
@@ -1509,6 +1744,27 @@ const ACT = {
     if (!confirm('この記録を削除しますか?')) return;
     op({ t: 'del', doc: recDoc(r), path: `recs.${r.id}` }, true); closeModal(); render(); toast('{削除|さくじょ}しました');
   },
+  wnew: () => wordModal(null),
+  wopen: el => wordView(el.dataset.v),
+  wedit: el => wordModal(el.dataset.v),
+  wcatf: el => { WST.cat = el.dataset.v; render(); },
+  wfam: () => { WST.fam = !WST.fam; render(); },
+  wcat: el => document.querySelectorAll('#wC button').forEach(b => b.classList.toggle('on', b === el)),
+  wvis: el => document.querySelectorAll('#wV button').forEach(b => b.classList.toggle('on', b === el)),
+  wcam: () => document.getElementById('wCam').click(),
+  wpick: () => document.getElementById('wPick').click(),
+  wphdel: () => { if (!WEDIT) return; WEDIT.newPhoto = null; WEDIT.removePhoto = true; document.getElementById('wPh').innerHTML = T('<div class="wph0">{写真|しゃしん}なし</div>'); document.getElementById('wPhDel').style.display = 'none'; },
+  wsave: () => wordSave(),
+  wdel: el => {
+    const w = words().find(x => x.id === el.dataset.v); if (!w) return;
+    if (!confirm('この言葉を削除しますか?')) return;
+    if (w.photo) { delPhoto('zz_p_' + w.id); delPhoto('zz_t_' + w.id); }
+    op({ t: 'del', doc: 'words', path: `items.${w.id}` }, true); WEDIT = null; closeModal(); render(); toast('{削除|さくじょ}しました');
+  },
+  wcopy: el => { const w = words().find(x => x.id === el.dataset.v); if (w) copyNow(w.memo); },
+  wzoom: el => openViewer(el.dataset.v),
+  vwzoom: () => document.querySelector('#viewer .vwin').classList.toggle('big'),
+  vwclose: () => { const v = document.getElementById('viewer'); v.classList.remove('on'); v.innerHTML = ''; },
   voice: () => voiceModal(),
   vmic: () => { if (REC) stopRec(false); else vStart(true); },
   vgo: () => vGo(),
@@ -1573,20 +1829,24 @@ document.addEventListener('click', e => {
 });
 document.addEventListener('change', e => {
   const el = e.target.closest('[data-chg]'); if (el && CHG[el.dataset.chg]) CHG[el.dataset.chg](el);
+  if ((e.target.id === 'wCam' || e.target.id === 'wPick') && e.target.files[0]) { wordPhotoChosen(e.target.files[0]); e.target.value = ''; }
   if (e.target.id === 'bkfile' && e.target.files[0]) {
     const rd = new FileReader();
     rd.onload = () => {
       try {
         const j = JSON.parse(rd.result); if (!j || j.app !== 'odaimoku-cho' || !j.docs) throw 0;
         if (!confirm('バックアップの記録を取りこみますか?(いまの記録は消えず、足し合わせます)')) return;
-        for (const [id, data] of Object.entries(j.docs)) if (id.startsWith('rec_') || id === 'prayers') op({ t: 'merge', doc: id, data }, true);
+        for (const [id, data] of Object.entries(j.docs)) if (id.startsWith('rec_') || id === 'prayers' || id === 'words') op({ t: 'merge', doc: id, data }, true);
         render(); toast('{復元|ふくげん}しました');
       } catch (er) { toast('ファイルが{読|よ}めませんでした'); }
     };
     rd.readAsText(e.target.files[0]); e.target.value = '';
   }
 });
-document.addEventListener('input', e => { if (e.target.id === 'fM' || e.target.id === 'fSec') calcHen(); });
+document.addEventListener('input', e => {
+  if (e.target.id === 'fM' || e.target.id === 'fSec') calcHen();
+  if (e.target.id === 'wQ') { WST.q = e.target.value; const l = document.getElementById('wlist'); if (l) { l.innerHTML = T(wordList()); hydratePhotos(l); } }
+});
 document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible') { if (TS.running) wake(true); render(); } });
 
 /* ---------- 起動 ---------- */
@@ -1594,7 +1854,7 @@ rebuild(); if (LOCAL_ONLY) seedPrayers(); renderHeader(); render();
 if (!L.me) whoModal();
 initFirebase();
 if ('serviceWorker' in navigator && location.protocol.startsWith('http')) navigator.serviceWorker.register('sw.js').catch(() => {});
-window.__od = { splitSpoken, cleanSpeech, parseCmd, parseAdd, suggestCat, applyChange, findTargets, parseImport, exportText, get DOCS() { return DOCS; }, get RECS() { return RECS; }, TS, L, get MODE() { return MODE; } };
+window.__od = { words, IDB, PHC, splitSpoken, cleanSpeech, parseCmd, parseAdd, suggestCat, applyChange, findTargets, parseImport, exportText, get DOCS() { return DOCS; }, get RECS() { return RECS; }, TS, L, get MODE() { return MODE; } };
 </script>
 </body>
 </html>
