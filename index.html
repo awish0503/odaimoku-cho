@@ -330,7 +330,7 @@ const hen = sec => Math.floor(Math.max(0, sec) * HEN_PER_MIN / 60);
 const PEOPLE = [
   { id: 'papa',  name: 'パパ', rb: 'パパ',            color: '#2b7bd6', emoji: '👨' },
   { id: 'mama',  name: 'ママ', rb: 'ママ',            color: '#e0607e', emoji: '👩' },
-  { id: 'aisei', name: '藍世', rb: '{藍世|あいせい}', color: '#f0a030', emoji: '👧' },
+  { id: 'aisei', name: '藍世', rb: '{藍世|あいせい}', color: '#f0a030', emoji: '👦' },
 ];
 const P = id => PEOPLE.find(p => p.id === id) || PEOPLE[0];
 
@@ -848,10 +848,10 @@ function vRange() {
 /* ---------- 御祈念項目(4分類・祈念チェック/達成チェック) ---------- */
 const STATUS = { praying: '{祈念中|きねんちゅう}', yes: '{達成|たっせい}', no: '{叶|かな}わなかった' };
 const CATS = [
-  { id: 'work',   icon: '💼', name: '{仕事|しごと}',           desc: () => '{売上|うりあげ}・{粗利|あらり}・{新規開拓|しんきかいたく}・{会社|かいしゃ}の{成長|せいちょう}' },
-  { id: 'self',   icon: '🌱', name: '{自分|じぶん}',           desc: () => '{人間性|にんげんせい}・{学習|がくしゅう}・{健康|けんこう}・{挑戦|ちょうせん}' },
   { id: 'family', icon: '🏠', name: '{家族|かぞく}',           desc: () => L.me === 'papa' ? '{妻|つま}・{藍世|あいせい}・{家族|かぞく}の{幸|しあわ}せ' : '{家族|かぞく}の{幸|しあわ}せ' },
   { id: 'others', icon: '🤝', name: '{周囲|しゅうい}の{人|ひと}', desc: () => '{社員|しゃいん}・{友人|ゆうじん}・{知人|ちじん}・{地域|ちいき}' },
+  { id: 'self',   icon: '🌱', name: '{自分|じぶん}',           desc: () => '{人間性|にんげんせい}・{学習|がくしゅう}・{健康|けんこう}・{挑戦|ちょうせん}' },
+  { id: 'work',   icon: '💼', name: '{仕事|しごと}',           desc: () => '{売上|うりあげ}・{粗利|あらり}・{新規開拓|しんきかいたく}・{会社|かいしゃ}の{成長|せいちょう}' },
 ];
 const catOf = id => CATS.find(c => c.id === id) || { icon: '📂', name: '{未分類|みぶんるい}' };
 const dkey = d => 'd' + d.replace(/-/g, '');
@@ -1260,7 +1260,7 @@ function vSet() {
       <div class="sd">{保存|ほぞん}した{唱題|しょうだい}は、ここで{選|えら}んだ{人|ひと}の{記録|きろく}になります。</div></div>
     <div class="srow"><div class="sl">{漢字|かんじ}のふりがな</div>
       <div class="wseg plain"><button class="${furiOn() ? 'on' : ''}" data-act="furi" data-v="1">つける</button><button class="${!furiOn() ? 'on' : ''}" data-act="furi" data-v="0">つけない</button></div>
-      <div class="sd">{藍世|あいせい}ちゃんのスマホは、はじめから「つける」になります。</div></div>
+      <div class="sd">{藍世|あいせい}のスマホは、はじめから「つける」になります。</div></div>
     <div class="srow"><div class="sl">1{日|にち}の{目標|もくひょう}</div>
       <input class="numin" type="number" inputmode="numeric" min="0" max="600" data-chg="goal" value="${L.goal}"> {分|ふん}
       <div class="sd">ストップウォッチの{輪|わ}が、{目標|もくひょう}に{向|む}かって{増|ふ}えていきます。</div></div>
