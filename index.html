@@ -258,8 +258,13 @@ ruby{ruby-position:over}
 .ioline button{flex:1;padding:10px 6px;border-radius:12px;background:#fff;border:1.5px solid var(--line);font-size:13.5px;font-weight:700;color:#3d5366}
 .imprev{margin-top:12px;border-top:1px solid var(--line)}
 .imph{font-weight:700;font-size:14px;margin:10px 0 4px}
-.improw{display:flex;gap:8px;align-items:flex-start;padding:6px 0;font-size:14px}
-.improw input{width:20px;height:20px;margin-top:2px;flex:none}
+.improw{display:flex;gap:8px;align-items:flex-start;padding:8px 0;font-size:14px;border-bottom:1px solid var(--line)}
+.improw .imck{width:20px;height:20px;margin-top:10px;flex:none}
+.improw .imx{flex:1;min-width:0}
+.improw .imti{width:100%;border:1.5px solid var(--line);border-radius:10px;padding:7px 10px;font-size:15px;line-height:1.45;background:#fbfcfd;resize:vertical;min-height:0}
+.improw .imsub{display:flex;align-items:center;gap:8px;margin-top:4px;flex-wrap:wrap}
+.improw .imca{border:1.5px solid var(--line);border-radius:10px;padding:5px 8px;font-size:14px;background:#fff}
+.improw .imca.need{border-color:var(--warn);background:#fdecea}
 .improw small{display:block;font-size:11.5px;color:var(--sub)}
 .improw.dup{opacity:.55}
 
@@ -912,7 +917,7 @@ function vPray() {
   ${uncat.length ? sec({ icon: '📂', name: '{未分類|みぶんるい}', desc: () => '✎で{分類|ぶんるい}を{選|えら}んでね' }, uncat, true) : ''}
   <button class="bigbtn" data-act="pnew">＋ {御祈念|ごきねん}{項目|こうもく}を{新規|しんき}{作成|さくせい}する</button>
   <div class="ioline"><button data-act="imp">📋 まとめて{取|と}り{込|こ}み</button><button data-act="exp">📤 {一覧|いちらん}をコピー</button></div>
-  <p class="note" style="text-align:center">Claudeで{整理|せいり}した{一覧|いちらん}の{取|と}り{込|こ}み・Claudeに{渡|わた}す{一覧|いちらん}のコピーができます</p>`;
+  <p class="note" style="text-align:center">ChatGPTやClaudeでまとめた{文|ぶん}を{貼|は}り{付|つ}けると、1つずつに{分|わ}けて{登録|とうろく}できます</p>`;
 }
 const SEEDS = [{ id: 'seed-tamaki-gohonzon', owner: 'papa', cat: 'others', title: '玉置さんのお母さんの御本尊授与' }];
 function seedPrayers() {
@@ -987,7 +992,7 @@ const catFromWord = w => { w = norm(w); for (const [k, arr] of Object.entries(CA
 const CAT_KW = {
   work: [['売上', 2], ['粗利', 2], ['利益', 2], ['新規', 2], ['開拓', 2], ['契約', 2], ['受注', 2], ['会社', 2], ['仕事', 2], ['営業', 2], ['商談', 2], ['取引', 2], ['顧客', 2], ['お客', 1], ['事業', 2], ['職場', 2], ['昇進', 2], ['給料', 1], ['ボーナス', 1], ['プロジェクト', 1], ['社', 1], ['店', 1]],
   family: [['藍世', 3], ['あいせ', 3], ['妻', 3], ['夫', 3], ['パパ', 3], ['ママ', 3], ['娘', 3], ['息子', 3], ['家族', 3], ['夫婦', 3], ['家庭', 2], ['我が家', 2], ['わが家', 2], ['子ども', 2], ['子供', 2], ['両親', 2], ['実家', 2], ['お父さん', 1], ['お母さん', 1]],
-  others: [['さん', 3], ['ちゃん', 2], ['くん', 2], ['社員', 3], ['部下', 3], ['同僚', 3], ['友人', 3], ['友達', 3], ['友だち', 3], ['知人', 3], ['地域', 3], ['近所', 3], ['先輩', 2], ['後輩', 2], ['御本尊', 2], ['ご本尊', 2], ['入会', 2], ['みんな', 1]],
+  others: [['ママ友', 4], ['パパ友', 4], ['さん', 3], ['ちゃん', 2], ['くん', 2], ['社員', 3], ['部下', 3], ['同僚', 3], ['友人', 3], ['友達', 3], ['友だち', 3], ['知人', 3], ['地域', 3], ['近所', 3], ['先輩', 2], ['後輩', 2], ['御本尊', 2], ['ご本尊', 2], ['入会', 2], ['みんな', 1]],
   self: [['健康', 2], ['勉強', 2], ['学習', 2], ['資格', 2], ['診断士', 3], ['試験', 2], ['ダイエット', 2], ['体重', 2], ['運動', 2], ['腕立て', 2], ['筋トレ', 2], ['ゴルフ', 2], ['ジョギング', 2], ['ランニング', 2], ['挑戦', 2], ['人間性', 2], ['早起き', 2], ['読書', 2], ['自分', 2], ['習慣', 1], ['成長', 1]],
 };
 function suggestCat(t) {
@@ -1061,7 +1066,7 @@ function voiceModal() {
     <button class="vmic" id="vMic" data-act="vmic">🎤</button>
     <div class="vst" id="vSt"></div>
     <textarea id="vTx" placeholder="${plain('ここに{聞|き}き{取|と}った{文|ぶん}が{出|で}ます。{手|て}で{直|なお}してもOK')}"></textarea>
-    <div class="vex">{例|れい})<br>・{家族|かぞく}みんなが{健康|けんこう}でいられますように<br>・{仕事|しごと}に{新規獲得四社|しんきかくとくよんしゃ}を{追加|ついか}して<br>・{腕立|うでた}て{伏|ふ}せ10{回|かい}を20{回|かい}に{変|か}えて<br>・{腕立|うでた}て{伏|ふ}せを{達成|たっせい}にして / 〇〇を{削除|さくじょ}して</div>
+    <div class="vex">{例|れい})<br>・{家族|かぞく}みんなが{健康|けんこう}でいられますように<br>・{仕事|しごと}に{新規獲得四社|しんきかくとくよんしゃ}を{追加|ついか}して<br>・{腕立|うでた}て{伏|ふ}せ10{回|かい}を20{回|かい}に{変|か}えて<br>・{腕立|うでた}て{伏|ふ}せを{達成|たっせい}にして / 〇〇を{削除|さくじょ}して<br>・いくつかまとめて:「〜ますように。それと〜。あと〜」→ {分|わ}けて{登録|とうろく}</div>
     <div class="mbtns"><button data-act="mclose">やめる</button><button class="pri" data-act="vgo">{決定|けってい}</button></div>`);
   vStart(false);
 }
@@ -1077,6 +1082,12 @@ function vStart(append) {
   const r = listen(t => { setV(false); if (t && document.getElementById('vTx')) tx.value = join(t); setV(false); }, t => { tx.value = join(t); });
   setV(!!r);
 }
+function splitSpoken(raw) {
+  let s = String(raw || '').normalize('NFKC');
+  s = s.replace(/(?:^|\s)まず(?:は)?(?=\s|[^\s])/g, ' ').replace(/(?:それと|それから|あとは|あと、|あと(?=\s)|次に|つぎに|もうひとつ(?:は)?|もう一つ(?:は)?|もう1つ(?:は)?|(?:ひと|ふた|みっ|よっ|一|二|三|四|五|1|2|3|4|5)つ目(?:は|が)?|最後に|さいごに)/g, '\n');
+  s = s.replace(/(ますように)(?=.)/g, '$1\n').replace(/(ように)(?=\s+\S)/g, '$1\n').replace(/[。．!！]/g, '\n');
+  return s.split('\n').map(x => cleanSpeech(x)).filter(x => x.length >= 2);
+}
 function vGo() {
   stopRec(true);
   const raw = (document.getElementById('vTx') || {}).value || '';
@@ -1090,6 +1101,15 @@ function vGo() {
       return vChangeModal();
     }
     if (cmd.type === 'del') return toast('どの{項目|こうもく}か{分|わ}かりませんでした');
+  }
+  const parts = splitSpoken(raw);
+  if (parts.length >= 2) {
+    IMP = markDup(parts.map(x => { const a = parseAdd(x); const c = a.cat || suggestCat(a.title); return { cat: c, sug: !a.cat && !!c, title: a.title, due: '', fav: false, vis: 'family', body: '', ach: false, pr: false }; }).filter(x => x.title));
+    openModal(`<h3>🎤 {分|わ}けて{登録|とうろく}</h3>
+      <div class="heard">🎤「${esc(raw)}」</div>
+      <div class="note" style="margin-top:0">${IMP.length}つに{分|わ}けました。{文|ぶん}と{分類|ぶんるい}を{確|たし}かめて{登録|とうろく}してね(1つにまとめたいときは「やめる」で{戻|もど}って、{手|て}で{直|なお}してね)</div>
+      <div id="impPrev"></div>`);
+    return renderImp();
   }
   const a = parseAdd(t);
   const sug = a.cat || suggestCat(a.title);
@@ -1162,26 +1182,50 @@ function parseDate(s) {
   if ((m = s.match(/(\d{1,2})[/月](\d{1,2})日?/))) { const t = today(); let y = +t.slice(0, 4); const d = `${y}-${pad(+m[1])}-${pad(+m[2])}`; return d < t ? `${y + 1}-${pad(+m[1])}-${pad(+m[2])}` : d; }
   return '';
 }
+const BULLET = /^(?:[-*・•●◯○◆□▪►▶→✓✔]|\d+\s*[.)．、）:：]|[①-⑳]|[(（]\d+[)）])\s*/;
+const SKIP_HEAD = /ルール|目的|指示|形式|注意|表示|更新|確認|未収録|プロジェクト|引き継ぎ|分類|使い方|流れ/;
+function markDup(list) {
+  const mine = prayers().filter(p => p.owner === L.me).map(p => norm(p.title));
+  const seen = new Set(), out = [];
+  for (const it of list) { const k = norm(it.title); if (seen.has(k)) continue; seen.add(k); it.dup = mine.includes(k); out.push(it); }
+  return out;
+}
 function parseImport(txt) {
-  const out = []; let cat = null;
-  for (const raw of String(txt).split(/\r?\n/)) {
-    let l = raw.normalize('NFKC').trim(); if (!l || /^```/.test(l) || /^※/.test(l)) continue;
-    const h = l.match(/^(?:#{1,6}\s*|【|■|◆|\[)\s*(.+?)\s*(?:】|\])?\s*$/);
-    const bare = l.replace(/[*【】■◆#\[\]\s:：]/g, '');
-    if (h || catFromWord(bare)) {
-      const name = (h ? h[1] : bare).replace(/[*【】]/g, '').replace(/^\d+[.)]\s*/, '').replace(/[:：].*$/, '').trim();
-      cat = catFromWord(name); continue;
+  const lines = String(txt).split(/\r?\n/).map(r => r.normalize('NFKC').replace(/\*\*/g, '').trim());
+  const anyBullet = lines.some(l => BULLET.test(l) || /\\?\[\s*[xX✓✔]?\s*\\?\]/.test(l));
+  const out = []; let cat = null, skip = false, inCode = false;
+  for (let l of lines) {
+    if (/^```/.test(l)) { if (inCode) { cat = null; skip = true; } inCode = !inCode; continue; }
+    if (!l || /^※/.test(l)) continue;
+    // 見出し
+    let head = null, m;
+    if ((m = l.match(/^#{1,6}\s*(.+)$/))) head = m[1];
+    else if ((m = l.match(/^[【\[■◆]\s*([^】\]]{1,20}?)\s*[】\]]?\s*$/)) && !BULLET.test(l.replace(/^[■◆]/, ''))) head = m[1];
+    else if (!BULLET.test(l) && (m = l.match(/^(.{1,20})[:：]$/))) head = m[1];
+    else if (catFromWord(l.replace(/[\s:：]/g, ''))) head = l;
+    if (head !== null) {
+      head = head.replace(/^\d+[.)]\s*/, '').replace(/[:：].*$/, '').replace(/[【】\[\]]/g, '').trim();
+      cat = catFromWord(head); skip = !cat && SKIP_HEAD.test(head);
+      continue;
     }
-    if (!cat) continue;
-    if (!/^(?:[-*・•●]|\d+[.)]|\\?\[)/.test(l)) continue;
-    let t = l.replace(/^(?:[-*・•●]\s*|\d+[.)]\s*)/, '');
+    if (skip) continue;
+    const isBul = BULLET.test(l) || /^\\?\[/.test(l);
+    if (anyBullet && !isBul) continue;
+    if (!anyBullet && (/^(?:以下|こちら|次の|上記|まとめ)/.test(l) || /[:：]$/.test(l))) continue;
+    let t = l.replace(BULLET, '');
     let ach = false, pr = false;
     t = t.replace(/\\?\[\s*([xX✓✔]?)\s*\\?\]\s*(祈念|達成)(?:チェック)?/g, (m0, x, k) => { if (x) { if (k === '達成') ach = true; else pr = true; } return ''; });
-    t = t.replace(/\\/g, '');
+    t = t.replace(/\\/g, '').replace(/^\\?\[\s*\\?\]\s*/, '');
+    // 行の中の分類(「家族:〇〇」「【家族】〇〇」)
+    let lineCat = null;
+    if ((m = t.match(/^[【\[]\s*([^】\]]+?)\s*[】\]]\s*(.+)$/)) && catFromWord(m[1])) { lineCat = catFromWord(m[1]); t = m[2]; }
+    else if ((m = t.match(/^(仕事|自分|家族|周囲の人|周りの人)\s*[:：]\s*(.+)$/))) { lineCat = catFromWord(m[1]); t = m[2]; }
     const parts = t.split(/[｜|]/).map(x => x.trim());
     const title = parts.shift().replace(/^[　\s]+|[　\s]+$/g, '');
-    if (!title) continue;
-    const it = { cat, title, due: '', fav: false, vis: 'family', body: '', ach, pr };
+    if (!title || title === '項目の文章') continue;
+    const c = lineCat || cat;
+    const it = { cat: c || suggestCat(title), sug: !c, title, due: '', fav: false, vis: 'family', body: '', ach, pr };
+    if (!c && !it.cat) it.sug = false;
     for (const x of parts) {
       if (/⭐|★|お気に入り/.test(x)) it.fav = true;
       else if (/🔒|自分だけ/.test(x)) it.vis = 'me';
@@ -1191,40 +1235,53 @@ function parseImport(txt) {
     }
     out.push(it);
   }
-  const mine = prayers().filter(p => p.owner === L.me).map(p => norm(p.title));
-  for (const it of out) it.dup = mine.includes(norm(it.title));
-  return out;
+  return markDup(out);
 }
 let IMP = [];
 function importModal() {
   if (!L.me) return whoModal();
   IMP = [];
   openModal(`<h3>📋 まとめて{取|と}り{込|こ}み</h3>
-    <div class="note" style="margin-top:0">Claudeで{整理|せいり}した{一覧|いちらん}を{貼|は}り{付|つ}けてください。「### {仕事|しごと}」などの{見出|みだ}しと「- [ ] {祈念|きねん}チェック [ ] {達成|たっせい}チェック {項目|こうもく}」の{形|かたち}を{読|よ}み{取|と}ります。</div>
-    <textarea id="impTx" style="min-height:150px" placeholder="### 仕事&#10;- [ ] 祈念チェック　[ ] 達成チェック　新規獲得四社 ｜⭐"></textarea>
+    <div class="note" style="margin-top:0">ChatGPTやClaudeでまとめた{文|ぶん}を{貼|は}り{付|つ}けてください。「1. 2. 3.」「・」「-」の{箇条書|かじょうが}きや、1{行|ぎょう}ずつ{並|なら}んだ{文|ぶん}を、1つずつに{分|わ}けて{読|よ}み{取|と}ります。{分類|ぶんるい}がないものは{自動|じどう}でおすすめします。</div>
+    <textarea id="impTx" style="min-height:150px" placeholder="1. 家族みんなが健康でいられますように&#10;2. 藍世が毎日楽しく学校に通えますように&#10;3. 新規獲得四社"></textarea>
     <div class="mbtns" style="margin-top:8px"><button data-act="impreq">Claudeへのお{願|ねが}い{文|ぶん}をコピー</button><button class="pri" data-act="impread">{読|よ}み{取|と}る</button></div>
     <div id="impPrev"></div>`);
 }
 function importPreview() {
   IMP = parseImport(document.getElementById('impTx').value);
-  const el = document.getElementById('impPrev');
-  if (!IMP.length) { el.innerHTML = T('<div class="note" style="color:var(--warn)">{項目|こうもく}が{見|み}つかりませんでした。{見出|みだ}し(### {仕事|しごと} など)の{下|した}に「- 」で{始|はじ}まる{行|ぎょう}があるか{確|たし}かめてね</div>'); return; }
-  el.innerHTML = T(`<div class="imprev">${CATS.map(c => {
-    const rows = IMP.map((it, i) => [it, i]).filter(([it]) => it.cat === c.id);
-    if (!rows.length) return '';
-    return `<div class="imph">${c.icon} ${c.name}</div>` + rows.map(([it, i]) => `<label class="improw ${it.dup ? 'dup' : ''}"><input type="checkbox" data-i="${i}" ${it.dup ? '' : 'checked'}><span>${esc(it.title)}<small>${[it.fav ? '⭐' : '', it.vis === 'me' ? '🔒' : '', it.due ? '📅' + esc(it.due) : '', it.ach ? '🎉{達成|たっせい}' : '', it.dup ? 'すでにあります' : ''].filter(Boolean).join(' ')}</small></span></label>`).join('');
-  }).join('')}</div>
+  if (!IMP.length) { document.getElementById('impPrev').innerHTML = T('<div class="note" style="color:var(--warn)">{項目|こうもく}が{見|み}つかりませんでした。1{行|ぎょう}に1つずつ{並|なら}んでいるか{確|たし}かめてね</div>'); return; }
+  renderImp();
+}
+function renderImp() {
+  const el = document.getElementById('impPrev'); if (!el) return;
+  const opts = sel => `<option value="" ${sel ? '' : 'selected'}>${plain('{分類|ぶんるい}を{選|えら}ぶ')}</option>` + CATS.map(c => `<option value="${c.id}" ${sel === c.id ? 'selected' : ''}>${c.icon} ${plain(c.name)}</option>`).join('');
+  el.innerHTML = T(`<div class="imprev">
+    <div class="note" style="margin:8px 0 2px">${IMP.length}{件|けん}{見|み}つかりました。{文|ぶん}と{分類|ぶんるい}はここで{直|なお}せます</div>
+    ${IMP.map((it, i) => `<div class="improw ${it.dup ? 'dup' : ''}">
+      <input type="checkbox" class="imck" data-i="${i}" ${it.dup ? '' : 'checked'}>
+      <div class="imx">
+        <textarea class="imti" data-i="${i}" maxlength="120" rows="2">${esc(it.title)}</textarea>
+        <div class="imsub"><select class="imca" data-i="${i}">${opts(it.cat)}</select>
+        <small>${[it.sug ? '💡おすすめ' : '', it.fav ? '⭐' : '', it.vis === 'me' ? '🔒' : '', it.due ? '📅' + esc(it.due) : '', it.ach ? '🎉{達成|たっせい}' : '', it.dup ? 'すでにあります' : ''].filter(Boolean).join(' ')}</small></div>
+      </div></div>`).join('')}
+  </div>
   <div class="mbtns"><button data-act="mclose">やめる</button><button class="pri" data-act="impsave">チェックした{項目|こうもく}を{登録|とうろく}</button></div>`);
 }
 function importSave() {
-  const sel = [...document.querySelectorAll('#impPrev input[type=checkbox]:checked')].map(x => IMP[+x.dataset.i]);
-  if (!sel.length) return toast('{登録|とうろく}する{項目|こうもく}がありません');
+  const rows = [...document.querySelectorAll('#impPrev .imck:checked')].map(x => +x.dataset.i);
+  if (!rows.length) return toast('{登録|とうろく}する{項目|こうもく}がありません');
   const items = {}, td = today(); let n = 0;
-  for (const it of sel) {
-    items[newId() + (n++)] = { owner: L.me, cat: it.cat, fav: it.fav, title: it.title, body: it.body, due: it.due, vis: it.vis, status: it.ach ? 'yes' : 'praying', result: '', doneAt: it.ach ? td : '', ...(it.pr ? { pd: { [dkey(td)]: true } } : {}), created: Date.now() + n, upd: Date.now() };
+  for (const i of rows) {
+    const it = IMP[i];
+    const title = document.querySelector(`.imti[data-i="${i}"]`).value.trim();
+    const cat = document.querySelector(`.imca[data-i="${i}"]`).value;
+    if (!title) continue;
+    if (!cat) { document.querySelector(`.imca[data-i="${i}"]`).classList.add('need'); return toast('{分類|ぶんるい}が{選|えら}ばれていない{項目|こうもく}があります'); }
+    items[newId() + (n++)] = { owner: L.me, cat, fav: it.fav, title, body: it.body, due: it.due, vis: it.vis, status: it.ach ? 'yes' : 'praying', result: '', doneAt: it.ach ? td : '', ...(it.pr ? { pd: { [dkey(td)]: true } } : {}), created: Date.now() + n, upd: Date.now() };
   }
+  if (!n) return toast('{登録|とうろく}する{項目|こうもく}がありません');
   op({ t: 'merge', doc: 'prayers', data: { items } }, true);
-  closeModal(); render(); toast(`${sel.length}{件|けん}を{登録|とうろく}しました`);
+  closeModal(); render(); toast(`${n}{件|けん}を{登録|とうろく}しました`);
 }
 function exportText() {
   const mine = prayers().filter(p => p.owner === L.me), td = today();
@@ -1537,7 +1594,7 @@ rebuild(); if (LOCAL_ONLY) seedPrayers(); renderHeader(); render();
 if (!L.me) whoModal();
 initFirebase();
 if ('serviceWorker' in navigator && location.protocol.startsWith('http')) navigator.serviceWorker.register('sw.js').catch(() => {});
-window.__od = { cleanSpeech, parseCmd, parseAdd, suggestCat, applyChange, findTargets, parseImport, exportText, get DOCS() { return DOCS; }, get RECS() { return RECS; }, TS, L, get MODE() { return MODE; } };
+window.__od = { splitSpoken, cleanSpeech, parseCmd, parseAdd, suggestCat, applyChange, findTargets, parseImport, exportText, get DOCS() { return DOCS; }, get RECS() { return RECS; }, TS, L, get MODE() { return MODE; } };
 </script>
 </body>
 </html>
