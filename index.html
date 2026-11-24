@@ -426,12 +426,11 @@ function fmtDur(sec) {
   if (h > 0) return `${h}{時間|じかん}${m ? `${m}{分|${fun(m)}}` : ''}`;
   return `${m}{分|${fun(m)}}`;
 }
-function fmtHen(n, exact) {
-  if (!exact && n >= 10000) {
-    const v = n / 10000, s = v >= 100 ? String(Math.round(v)) : v.toFixed(1).replace(/\.0$/, '');
-    return `${s}{万遍|まんべん}`;
-  }
-  return `${n.toLocaleString('ja-JP')}{遍|${ben(n)}}`;
+function fmtHen(n) {
+  n = Math.max(0, Math.floor(n || 0));
+  if (n < 10000) return `${n.toLocaleString('ja-JP')}{遍|${ben(n)}}`;
+  const man = Math.floor(n / 10000), rest = n % 10000;
+  return rest ? `${man.toLocaleString('ja-JP')}{万|まん}${rest.toLocaleString('ja-JP')}{遍|${ben(rest)}}` : `${man.toLocaleString('ja-JP')}{万遍|まんべん}`;
 }
 const newId = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
 
@@ -604,14 +603,14 @@ function tReset() {
 }
 function tSave() {
   if (TS.running) tStop();
-  const sec = Math.floor(elapsed());
+  const secF = Math.round(elapsed() * 1000) / 1000, sec = Math.floor(secF);
   if (sec < 1) { toast('まだ{記録|きろく}がありません'); return; }
   if (!L.me) return whoModal();
   const st = new Date(TS.first || (Date.now() - sec * 1000));
-  const rec = { who: L.me, d: ymd(st), s: `${pad(st.getHours())}:${pad(st.getMinutes())}`, sec, memo: '', m: false, at: Date.now() };
+  const rec = { who: L.me, d: ymd(st), s: `${pad(st.getHours())}:${pad(st.getMinutes())}`, sec: secF, memo: '', m: false, at: Date.now() };
   tClear();
   op({ t: 'merge', doc: recDoc(rec), data: { recs: { [newId()]: rec } } });
-  toast(`{保存|ほぞん}しました! ${fmtDur(sec)}・${fmtHen(hen(sec, rec.who), true)}`);
+  toast(`{保存|ほぞん}しました! ${fmtDur(sec)}・${fmtHen(hen(secF, rec.who))}`);
 }
 
 const ARC_R = 110, ARC_C = 2 * Math.PI * ARC_R, ARC_L = ARC_C * 0.75;
@@ -625,7 +624,7 @@ function tick() {
   const e = Math.min(elapsed(), tm ? tgt : Infinity);
   const big = document.getElementById('big'); if (!big) return;
   big.textContent = hms(tm ? Math.max(0, tgt - e) : e);
-  document.getElementById('hen').innerHTML = T(fmtHen(hen(Math.floor(e)), true));
+  document.getElementById('hen').innerHTML = T(fmtHen(hen(e)));
   let p, sub;
   if (tm) {
     p = tgt ? e / tgt : 0;
@@ -1621,7 +1620,7 @@ function recModal(id, d) {
     <label class="fl">{日|ひ}にち</label><input type="date" id="fD" value="${v.d}">
     <label class="fl">{始|はじ}めた{時刻|じこく}</label><input type="time" id="fS" value="${v.s}">
     <label class="fl">{唱題|しょうだい}した{時間|じかん}</label>
-    <div class="durin"><input type="number" id="fM" inputmode="numeric" min="0" max="900" value="${Math.floor(v.sec / 60)}">{分|ふん}<input type="number" id="fSec" inputmode="numeric" min="0" max="59" value="${v.sec % 60}">{秒|びょう}</div>
+    <div class="durin"><input type="number" id="fM" inputmode="numeric" min="0" max="900" value="${Math.floor(v.sec / 60)}">{分|ふん}<input type="number" id="fSec" inputmode="numeric" min="0" max="59" value="${Math.floor(v.sec % 60)}">{秒|びょう}</div>
     <div class="calc" id="fHen"></div>
     <label class="fl">メモ(なくてもOK)</label><input type="text" id="fMemo" maxlength="100" value="${esc(v.memo || '')}">
     <div class="mbtns">${r ? `<button class="del" data-act="recdel" data-v="${r.id}">{削除|さくじょ}</button>` : ''}<button data-act="mclose">やめる</button><button class="pri" data-act="recsave" data-v="${r ? r.id : ''}">{保存|ほぞん}</button></div>`);
@@ -1635,7 +1634,8 @@ function recSave(id) {
   if (!s) return toast('{時刻|じこく}を{入|い}れてね');
   if (sec < 1) return toast('{時間|じかん}を{入|い}れてね');
   const old = id ? RECS.find(x => x.id === id) : null;
-  const rec = { who: FWHO, d, s: s.slice(0, 5), sec, memo: document.getElementById('fMemo').value.trim(), m: old ? !!old.m : true, at: old ? (old.at || Date.now()) : Date.now(), ed: Date.now() };
+  const keep = old && Math.floor(old.sec) === sec ? old.sec : sec;
+  const rec = { who: FWHO, d, s: s.slice(0, 5), sec: keep, memo: document.getElementById('fMemo').value.trim(), m: old ? !!old.m : true, at: old ? (old.at || Date.now()) : Date.now(), ed: Date.now() };
   const rid = id || newId();
   if (old && recDoc(old) !== recDoc(rec)) op({ t: 'del', doc: recDoc(old), path: `recs.${rid}` }, true);
   op({ t: 'merge', doc: recDoc(rec), data: { recs: { [rid]: rec } } }, true);
